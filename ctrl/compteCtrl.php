@@ -21,15 +21,23 @@ class compteCtrl extends Ctrl {
 				)
 			)
 		);
-		//var_dump($tickets);
+
 		$this->set('tickets', $tickets);
 		$this->set('user', $user);
 	}
 
 	public function delete() {
-
 	}
 
+	public function edit() {
+	}
+
+	public function deconnexion() {
+		$this->Session->write('user', array());
+		$this->Session->write('auth', false);
+		$this->Session->setFlash("Vous êtes déconnecté...", "success");
+		$this->redirect(url());
+	}
 
 }
 
