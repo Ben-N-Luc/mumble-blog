@@ -5,6 +5,7 @@ class compteCtrl extends Ctrl {
 	public $uses = array(
 		'Models' => array('User', 'Ticket')
 	);
+	public $allowed = 'connected';
 
 	public function compte() {
 		$user = $this->Session->read('user');
