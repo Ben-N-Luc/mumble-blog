@@ -26,6 +26,10 @@ class compteCtrl extends Ctrl {
 		$this->set('user', $user);
 	}
 
+	public function delete() {
+
+	}
+
 
 }
 

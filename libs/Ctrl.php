@@ -100,7 +100,7 @@ class Ctrl {
 	 * vérifie si l'utilisateur doit être identifié
 	 * charge la vue et le layout
 	 */
-	public function __construct($script_name) {
+	public function __construct($script_name, $action) {
 		/* initialisation de la session */
 		$this->Session = new Session();
 
@@ -160,10 +160,10 @@ class Ctrl {
 		}
 
 		/* Lancement de la fonction principale */
-		if(in_array($script_name, array_diff(get_class_methods($this), get_class_methods('Ctrl')))) {
-			$this->$script_name();
+		if(in_array($action, array_diff(get_class_methods($this), get_class_methods('Ctrl')))) {
+			$this->$action();
 		} else {
-			$this->error($script_name . ' method not found', E_USER_ERROR);
+			$this->error($action . ' method not found', E_USER_ERROR);
 		}
 
 		extract($this->data);
@@ -176,13 +176,13 @@ class Ctrl {
 		 * Loading view
 		 */
 		ob_start();
-		if(is_file(VIEWS_DIR . DS . $script_name . '.php')) {
-			require VIEWS_DIR . DS . $script_name . '.php';
+		if(is_file(VIEWS_DIR . DS . $script_name . DS . $action . '.php')) {
+			require VIEWS_DIR . DS . $script_name . DS . $action . '.php';
 		} elseif($script_name == '') {
-			require VIEWS_DIR . DS . 'index.php';
+			require VIEWS_DIR . DS . 'index' . DS . 'index.php';
 		} else {
 			header("HTTP/1.0 404 Not Found");
-			require VIEWS_DIR . DS . 'e404.php';
+			require VIEWS_DIR . DS . 'e404' . DS . 'e404.php';
 		}
 		/* getting view */
 		$content_for_layout = ob_get_clean();
