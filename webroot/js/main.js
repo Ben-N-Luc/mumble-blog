@@ -12,7 +12,7 @@ jQuery(function($) {
 
 	/* all link with confirm class will ask if sure ! */
 	$('a.confirm').click(function(event) {
-		event.preventDefault();
+		//event.preventDefault();
 		log("Confirmation");
 		return confirm('Êtes-vous sûr ?');
 	});
