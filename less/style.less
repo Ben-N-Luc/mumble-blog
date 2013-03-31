@@ -1,0 +1,502 @@
+@import 'libs.less';
+
+
+/***
+ * Fonts
+***/
+@font-face {
+  font-family: 'Lobster';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lobster'), url("@{webroot}/fonts/lobster.woff") format('woff');
+}
+
+/***
+ * Général
+***/
+body {
+	font-family: sans-serif;
+	font-size: 1em;
+	background: @bgColor;
+	color: @fontColor;
+	overflow-y: scroll;
+}
+
+div, body, ul, section, article,
+header, nav, aside, footer {
+	margin: 0;
+	padding: 0;
+	display: block;
+	.box-sizing(border-box)
+}
+
+h1, h2, h3 {
+	font-family: Lobster, sans-serif;
+	margin: 0; padding: 0;
+	text-shadow: 1px 1px 0 rgba(255,255,255,0.1);
+}
+
+h1 {
+	font-size: 3em;
+}
+
+h2 {
+	font-size: 2.3em;
+	margin-bottom: 20px;
+}
+
+h3 {
+	font-size: 1.8em;
+	margin-bottom: 15px;
+}
+
+a {
+	text-decoration: none;
+	color: @linkColor;
+
+	&:hover {
+		text-decoration: underline;
+		color: darken(@linkColor, 5);
+	}
+}
+
+.pull-left {
+	float: left;
+}
+
+.pull-right {
+	float: right;
+}
+
+.clearfix {
+	clear: both;
+}
+
+.global {
+	width: @siteWidth;
+	margin: auto;
+}
+
+/***
+ * Forms
+***/
+label {
+	margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+textarea,
+.uneditable-input, {
+	border: 4px solid white !important;
+	.box-shadow() !important;
+}
+
+input[type="text"]:focus:required:valid,
+input[type="password"]:focus:required:valid,
+input[type="datetime"]:focus:required:valid,
+input[type="datetime-local"]:focus:required:valid,
+input[type="date"]:focus:required:valid,
+input[type="month"]:focus:required:valid,
+input[type="time"]:focus:required:valid,
+input[type="week"]:focus:required:valid,
+input[type="number"]:focus:required:valid,
+input[type="email"]:focus:required:valid,
+input[type="url"]:focus:required:valid,
+input[type="search"]:focus:required:valid,
+input[type="tel"]:focus:required:valid,
+input[type="color"]:focus:required:valid,
+textarea:focus:required:valid,
+.uneditable-input,
+.success input:focus,
+.success textarea:focus {
+	border: 4px solid rgba(0, 255, 0, 0.5) !important;
+	.box-shadow() !important;
+}
+
+input[type="text"]:focus:required:invalid,
+input[type="password"]:focus:required:invalid,
+input[type="datetime"]:focus:required:invalid,
+input[type="datetime-local"]:focus:required:invalid,
+input[type="date"]:focus:required:invalid,
+input[type="month"]:focus:required:invalid,
+input[type="time"]:focus:required:invalid,
+input[type="week"]:focus:required:invalid,
+input[type="number"]:focus:required:invalid,
+input[type="email"]:focus:required:invalid,
+input[type="url"]:focus:required:invalid,
+input[type="search"]:focus:required:invalid,
+input[type="tel"]:focus:required:invalid,
+input[type="color"]:focus:required:invalid,
+textarea:focus:required:invalid,
+.uneditable-input,
+.warning input:focus,
+.warning textarea:focus {
+	border: 4px solid rgba(255, 50, 50, 0.7) !important;
+	.box-shadow() !important;
+}
+
+/***
+ * Nav
+***/
+nav {
+	background: @navBgColor;
+	height: @navHeight;
+	.border-radius(0 0 5px 5px);
+
+	.expand {
+		display: none;
+		margin-top: 7px;
+		margin-right: 9px;
+		text-align: center;
+		line-height: 15px;
+		width: 30px; height: 30px;
+		background: #222;
+		cursor: pointer;
+		border: 1px solid black;
+		.border-radius(5px);
+		.box-shadow(inset, 0, 0, 2px, rgba(255,255,255,0.7));
+
+		.icon {
+			display: block;
+			height: 5px;
+			font-weight: bolder;
+			font-size: 1.5em;
+		}
+	}
+
+	ul {
+		padding-left: 20px;
+		padding-right: 20px;
+
+		ul {
+			padding: 0;
+		}
+
+		li {
+			float: left;
+			list-style: none;
+			height: @navHeight;
+
+			a {
+				display: block;
+				padding: 0 15px;
+				height: @navHeight;
+				line-height: @navHeight;
+				font-weight: bold;
+				color: @fontColor;
+				border-left: 1px solid @navBgColor;
+				border-right: 1px solid @navBgColor;
+				.transition(0.3s, all);
+			}
+
+			&.active a {
+				height: 120%;
+			}
+
+			&:hover a {
+				height: 130%;
+				.transition(0.3s, height);
+			}
+
+			&.active a, &:hover a {
+				color: @navBgColor;
+				background: @fontColor;
+				text-decoration: none;
+				.box-shadow(inset, 0, -1px, 1px, rgba(0,0,0,0.6));
+			}
+		}
+	}
+}
+
+/***
+ * Content
+***/
+.content {
+	margin-left: @sidebarWidth + 5;
+	margin-top: @navMarginBottom;
+	margin-bottom: 15px;
+
+	div {
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
+	p {
+		text-align: justify;
+	}
+
+	ul {
+		padding-left: 30px;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+}
+
+.middle {
+	float: left;
+	width: 50%;
+	padding: 0 10px 0 10px;
+	text-align: right;
+
+	&:first-of-type {
+		border-right: 2px solid @fontColor;
+		padding-right: 15px;
+		text-align: left;
+	}
+	&:last-of-type {
+		padding-left: 15px;
+		border-left: 2px solid @fontColor;
+		margin-left: -2px; // pour recouvrir la bordure de l'élément précédent... si qqu'un trouve plus simple ;)
+	}
+
+	&.tickets {
+		article {
+			padding: 5px 17px;
+			border: 1px solid @fontColor;
+			margin-bottom: 15px;
+			.border-radius(3px);
+
+			.infos {
+				margin-top: 15px;
+				text-align: right;
+
+				ul {
+					padding-left: 0;
+
+					li {
+						list-style: none;
+						display: inline-block;
+					}
+				}
+			}
+		}
+
+
+
+	}
+
+	article {
+		text-align: justify;
+
+		.actions {
+			text-align: right;
+		}
+	}
+
+	.account {
+		.img  {
+			display: inline-block;
+			background-color: rgba(255, 255, 255, 0.2);
+			padding: 7px;
+			.border-radius(5px);
+
+			img {
+				vertical-align: middle;
+				.border-radius(3px);
+				max-width: @accountImgWidth;
+			}
+		}
+
+		.actions {
+			margin-top: 25px;
+
+			a {
+				margin-right: 15px;
+			}
+		}
+	}
+}
+
+/***
+ * aside
+***/
+aside {
+	float: left;
+	position: fixed;
+	top: @navHeight + @navMarginBottom;
+	padding: 7px 10px;
+	border: 1px solid @fontColor;
+	width: @sidebarWidth;
+	.border-radius(3px);
+
+	.root ul {
+		border-left: 2px dashed @fontColor;
+
+		.user_uptime {
+			right: -50px;
+		}
+	}
+}
+
+.root {
+	li {
+		list-style-type: none;
+	}
+
+	ul {
+		li {
+			margin: 7px 0 7px 10px;
+			padding-left: 10px;
+			list-style: none;
+		}
+
+		.user-name {
+			position: relative;
+
+			.user_uptime {
+				display: none;
+				position: absolute;
+				right: -50px; top: -5px;
+				background: rgba(0,0,0,0.8);
+				color: @fontColor;
+				padding: 3px 7px;
+				.border-radius(5px);
+				text-shadow: 0 0;
+				border: 1px solid black;
+				.box-shadow(0, 0, 2px, 0, rgba(255,255,255,0.7), inset);
+			}
+
+			&:hover .user_uptime {
+				display: block;
+			}
+		}
+	}
+
+	.channel-name {
+		position: relative;
+	}
+
+	.icon {
+		position: absolute;
+		right: -20px;
+		top: 1px;
+	}
+}
+
+
+/***
+ * Header
+***/
+header {
+	text-align: center;
+	margin-bottom: 40px;
+
+	h1 a {
+		color: inherit;
+
+		&:hover {
+			text-decoration: none;
+			text-shadow: 1px 1px 0 rgba(255,255,255,0.2);
+		}
+	}
+}
+
+/***
+ * Footer
+****/
+footer {
+	margin-top: 20px;
+	padding: 15px 10px;
+	border-top: 1px solid @fontColor;
+}
+
+/***
+ * Media Queries
+***/
+@media screen and (min-width: 600px)  {
+	nav ul li {
+		display: block !important;
+	}
+}
+@media screen and (max-width: 960px) {
+	aside {
+		float: none;
+		position: relative;
+		top: 0;
+		width: 100%;
+		margin-bottom: 15px;
+
+		ul .user_uptime {
+			right: 0 !important;
+		}
+	}
+	.content {
+		margin-left: 0;
+		border-bottom: 1px solid #F2D9BB;
+		min-height: auto !important;
+	}
+
+}
+
+@media screen and (max-width: 600px) {
+	nav {
+		height: auto;
+
+		&>ul {
+			width: 80%;
+		}
+
+		ul li {
+			float: none;
+			display: none;
+
+			a {
+				border: none;
+				border-top: 1px solid @navBgColor;
+				.transition(0s);
+			}
+
+			&.active {
+				display: block;
+			}
+
+			&.active a,
+			&:hover a {
+				height: auto;
+				.transition(0s)
+			}
+		}
+
+		.expand {
+			display: block;
+			float: right;
+		}
+
+		.pull-left,
+		.pull-right {
+			float: none;
+		}
+	}
+
+	.middle {
+		float: none;
+		width: 100%;
+		text-align: left;
+		border-right: none !important;
+		margin-bottom: 5px;
+
+		a:last-of-type {
+			border-top: 1px solid @fontColor;
+			padding-left: 0;
+			padding-top: 10px;
+		}
+	}
+
+	footer div {
+		float: none !important;
+		margin-bottom: 7px;
+	}
+}

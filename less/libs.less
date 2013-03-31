@@ -1,0 +1,60 @@
+// Colors
+@fontColor: #F2D9BB;
+@bgColor: #141F26;
+@linkColor: #618779;
+@navBgColor: #405950;
+
+// Measures
+@navHeight: 45px;
+@navMarginBottom: 35px;
+@siteWidth: 85%;
+@sidebarWidth: 15%;
+@accountImgWidth: 150px;
+
+// Functions
+.border-radius(@topLeft, @topRight, @bottomLeft, @bottomRight) {
+	-webkit-border-top-left-radius: @topLeft;
+	-webkit-border-top-right-radius: @topRight;
+	-webkit-border-bottom-right-radius: @bottomRight;
+	-webkit-border-bottom-left-radius: @bottomLeft;
+	-moz-border-radius-topleft: @topLeft;
+	-moz-border-radius-topright: @topRight;
+	-moz-border-radius-bottomright: @bottomRight;
+	-moz-border-radius-bottomleft: @bottomLeft;
+	border-top-left-radius: @topLeft;
+	border-top-right-radius: @topRight;
+	border-bottom-right-radius: @bottomRight;
+	border-bottom-left-radius: @bottomLeft;
+}
+.border-radius(@radius) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius: @radius;
+	border-radius: @radius;
+}
+.transition(@duration, @property: all) {
+	-webkit-transition: @arguments;
+	-moz-transition: @arguments;
+	-ms-transition: @arguments;
+	-o-transition: @arguments;
+	transition: @arguments;
+}
+.box-shadow(@x, @y, @blur, @spread, @color, @inset) {
+	-webkit-box-shadow: @arguments;
+	-moz-box-shadow: @arguments;
+	box-shadow: @arguments;
+}
+.box-shadow(@x, @y, @blur, @spread, @color) {
+	-webkit-box-shadow: @arguments;
+	-moz-box-shadow: @arguments;
+	box-shadow: @arguments;
+}
+.box-shadow(@x, @y, @blur, @color) {
+	-webkit-box-shadow: @arguments;
+	-moz-box-shadow: @arguments;
+	box-shadow: @arguments;
+}
+.box-sizing(@property) {
+	-webkit-box-sizing: @property;
+	-moz-box-sizing: @property;
+	box-sizing: @property;
+}
