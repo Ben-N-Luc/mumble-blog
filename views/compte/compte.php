@@ -17,7 +17,7 @@
 		</ul>
 		<div class="actions">
 			<a href="<?= url("compte/edit") ?>" class="btn">Éditer votre compte</a>
-			<a href="<?= url("compte/delete") ?>" class="btn btn-danger">Supprimer votre compte</a>
+			<a href="<?= url("compte/delete") ?>" class="btn btn-danger confirm">Supprimer votre compte</a>
 		</div>
 	</div>
 </section>

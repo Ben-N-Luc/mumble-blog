@@ -20,14 +20,14 @@ class Ctrl {
 		'connected' => array(
 			'left' => array(
 				'compte' => 'Mon compte',
-				'deconnexion' => 'Déconnexion'
+				'compte/deconnexion' => 'Déconnexion'
 			)
 		),
 		'admin' => array(
 			'left' => array(
 				'compte' => 'Mon compte',
 				'admin' => 'Administration',
-				'deconnexion' => 'Déconnexion'
+				'compte/deconnexion' => 'Déconnexion'
 			)
 		)
 	);
