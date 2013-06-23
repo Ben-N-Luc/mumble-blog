@@ -26,8 +26,9 @@ function debug($var) {
 	}
 	echo '.';
 	echo '</div>';
-	var_dump($var);
-	//print_r($var);
+	// var_dump($var);
+	echo '<pre>';
+	print_r($var);
 	echo '</div>';
 	echo '</div>';
 }
@@ -99,5 +100,3 @@ function object_keys($obj) {
 	}
 	return $keys;
 }
-
-?>

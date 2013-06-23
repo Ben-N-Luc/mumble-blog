@@ -3,6 +3,3 @@
 class Log extends Model {
 
 }
-
-
-?>

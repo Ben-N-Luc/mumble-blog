@@ -9,6 +9,3 @@ class tutorielCtrl extends Ctrl {
 	}
 
 }
-
-
-?>

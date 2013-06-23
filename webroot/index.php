@@ -15,21 +15,22 @@ define('DATA_DIR', ROOT . 'data');
 define('MODEL_DIR', ROOT . 'model');
 define('LESS_DIR', ROOT . 'less');
 
-/* Libs inclusion */
+// Libs inclusion
 include LIBS_DIR . DS . 'Includes.php';
 
-/* Custom Error handler */
+// Custom Error handler
 set_error_handler('error_handler');
 
-/* redirecting empty request to index */
+// Redirecting empty request to index
 $script_name = (REQUEST_URI == '') ? 'index' : REQUEST_URI;
 
 if(stripos($script_name, '/') !== false) {
-	$action = explode('/', $script_name);
-	$script_name = array_shift($action);
-	$action = current($action);
+	$params = explode('/', $script_name);
+	$script_name = array_shift($params);
+	$action = array_shift($params);
 } else {
 	$action = $script_name;
+	$params = array();
 }
 
 /**
@@ -39,13 +40,13 @@ if(stripos($script_name, '/') !== false) {
 if(is_file(CTRL_DIR . DS . $script_name . 'Ctrl.php')) {
 	require CTRL_DIR . DS . $script_name . 'Ctrl.php';
 	$controllerName = $script_name . 'Ctrl';
-	$ctrl = new $controllerName($script_name, $action);
+	$ctrl = new $controllerName($script_name, $action, $params);
 } else {
 	/* if the 404 page do not exist ! */
 	header("HTTP/1.0 404 Not Found");
 	//error('404 Error controller not found !!!', E_USER_ERROR);
 	require CTRL_DIR . DS . 'e404Ctrl.php';
-	$ctrl = new e404Ctrl('e404', 'e404');
+	$ctrl = new e404Ctrl('e404', 'e404', array('Ctrl not found (' . CTRL_DIR . DS . $script_name . 'Ctrl.php' . ')'));
 }
 
 

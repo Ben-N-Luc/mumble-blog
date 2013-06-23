@@ -77,6 +77,3 @@ class connexionCtrl extends Ctrl {
 
 	}
 }
-
-
-?>

@@ -14,5 +14,3 @@ if (Conf::$db) {
 } else {
 	require_once 'ModelCVS.php';
 }
-
-?>

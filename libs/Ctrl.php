@@ -7,10 +7,10 @@ class Ctrl {
 	 */
 	public $navLinks = array(
 		'default' => array(
-			'' => 'Accueil',
+			''             => 'Accueil',
 			'informations' => 'Informations',
-			'tutoriel' => 'Tuto',
-			'contact' => 'Contact'
+			'tutoriel'     => 'Tuto',
+			'ticket'       => 'Ticket'
 		),
 		'public' => array(
 			'left' => array(
@@ -19,14 +19,21 @@ class Ctrl {
 		),
 		'connected' => array(
 			'left' => array(
-				'compte' => 'Mon compte',
+				'compte'             => 'Mon compte',
 				'compte/deconnexion' => 'Déconnexion'
 			)
 		),
 		'admin' => array(
-			'left' => array(
-				'compte' => 'Mon compte',
-				'admin' => 'Administration',
+			'admin'              => 'Accueil',
+			'admin/tickets'      => 'Tickets',
+			'admin/posts-list'   => 'Posts',
+			'admin/tuto'         => 'Tuto',
+			'admin/users-list'   => 'Users',
+			'admin/mumble'       => 'Le serveur',
+			''                   => 'Le site',
+			'left'    => array(
+				'compte'             => 'Mon compte',
+				'admin'              => 'Administration',
 				'compte/deconnexion' => 'Déconnexion'
 			)
 		)
@@ -60,7 +67,7 @@ class Ctrl {
 	/**
 	 * Models loaded in every Ctrl
 	 */
-	public $DefaultModels = array('Log', 'Config');
+	public $DefaultModels = array('Config');
 
 	/**
 	 * Contain files needed for specifics controllers such as 'Models' wich are all the Models needed
@@ -100,11 +107,32 @@ class Ctrl {
 	 * vérifie si l'utilisateur doit être identifié
 	 * charge la vue et le layout
 	 */
-	public function __construct($script_name, $action) {
-		/* initialisation de la session */
+	public function __construct($ctrl, $action, $params) {
+		// initialisation de la session
 		$this->Session = new Session();
 
-		/* Génération du css lessPHP */
+		// Chargement des models
+		$models = array_merge($this->DefaultModels, $this->uses['Models']);
+		$this->loadModels($models);
+
+		// Redirection vers la page de connexion si nécessaire
+		if($this->allowed != 'all') {
+			$user = $this->Session->read('user');
+			if(!$this->Session->read('auth')
+			|| ($this->allowed == 'connected' && $user->rank != 'u' && $user->rank != 'a')
+			|| ($this->allowed == 'admin' && $user->rank != 'a')) {
+				$this->Session->setFlash('Connectez-vous !', 'warning');
+				$this->Log->add(array("Tentative d'accès à une page sécurisée (/" . REQUEST_URI . ")", 'not conected'));
+				$this->redirect(url($this->connectionUrl), 403);
+			}
+		}
+
+		// Stockage des informations de la classe
+		$this->ctrl = $ctrl;
+		$this->action = str_replace('-', '_', $action);
+		$this->params = $params;
+
+		// Génération du css lessPHP
 		$this->Less = new lessc;
 		$this->Less->setFormatter('compressed');
 		$this->Less->setVariables(array(
@@ -121,27 +149,7 @@ class Ctrl {
 			$this->Css .= file_get_contents(WEBROOT_DIR . DS . 'css' . DS . $name . '.css') . "\n";
 		}
 
-		/* chargement des models */
-		$models = array_merge($this->DefaultModels, $this->uses['Models']);
-		foreach ($models as $v) {
-			$v = ucfirst($v);
-			require MODEL_DIR . DS . $v . '.php';
-			$this->$v = new $v(strtolower($v));
-		}
-
-		/* Redirection vers la page de connexion si nécessaire */
-		if($this->allowed != 'all') {
-			$user = $this->Session->read('user');
-			if(!$this->Session->read('auth')
-			|| ($this->allowed == 'connected' && $user->rank != 'u' && $user->rank != 'a')
-			|| ($this->allowed == 'admin' && $user->rank != 'a')) {
-				$this->Session->setFlash('Connectez-vous !', 'warning');
-				$this->Log->add(array("Tentative d'accès à une page sécurisée (/" . REQUEST_URI . ")", 'not conected'));
-				$this->redirect(url($this->connectionUrl), 403);
-			}
-		}
-
-		/* Précréation des objets Post et Get */
+		// Précréation des objets Params, Post et Get
 		if(!empty($_POST)) {
 			$this->Post = new stdClass();
 			$this->Posted = true;
@@ -150,38 +158,42 @@ class Ctrl {
 			$this->Get = new stdClass();
 		}
 
-		/* Récupération du post */
+		// Récupération du post
 		foreach ($_POST as $k => $v) {
 			$this->Post->$k = htmlentities($v, ENT_QUOTES, 'utf-8');
 		}
-		/* Récupération du get */
+
+		// Récupération du get
 		foreach ($_GET as $k => $v) {
 			$this->Get->$k = urldecode($v);
 		}
 
-		/* Lancement de la fonction principale */
-		if(in_array($action, array_diff(get_class_methods($this), get_class_methods('Ctrl')))) {
-			$this->$action();
+		// Lancement de la fonction principale
+		if(in_array($this->action, array_diff(get_class_methods($this), get_class_methods('Ctrl')))) {
+			$this->{$this->action}();
 		} else {
-			$this->error($action . ' method not found', E_USER_ERROR);
+			require CTRL_DIR . DS . 'e404Ctrl.php';
+			$ctrl = new e404Ctrl('e404', 'e404', array('Method not found (' . $this->action . ')'));
+			exit();
 		}
 
 		extract($this->data);
 
 		if(REQUEST_URI != '') {
-			$title_for_layout = ucfirst(REQUEST_URI);
+			$title_for_layout = ucwords(str_replace('/', ' - ', str_replace('-', ' ', REQUEST_URI)));
 		}
 
 		/**
 		 * Loading view
 		 */
 		ob_start();
-		if(is_file(VIEWS_DIR . DS . $script_name . DS . $action . '.php')) {
-			require VIEWS_DIR . DS . $script_name . DS . $action . '.php';
-		} elseif($script_name == '') {
+		if(is_file(VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php')) {
+			require VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php';
+		} elseif($ctrl == '') {
 			require VIEWS_DIR . DS . 'index' . DS . 'index.php';
 		} else {
 			header("HTTP/1.0 404 Not Found");
+			$msg = 'View not found (' . VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php)';
 			require VIEWS_DIR . DS . 'e404' . DS . 'e404.php';
 		}
 		/* getting view */
@@ -196,6 +208,22 @@ class Ctrl {
 			$this->error($this->Layout . '.php do not exist in ' . VIEWS_DIR . DS . $this->Layout . '.php', E_USER_ERROR);
 		}
 
+	}
+
+	public function loadModels($models) {
+		foreach ($models as $model) {
+			if(!isset($this->$model) || $this->$model !== false) {
+				$this->loadModel($model);
+			}
+		}
+	}
+
+	public function loadModel($model) {
+		if(!isset($this->$model) || $this->$model !== false) {
+			$model = ucfirst($model);
+			require_once MODEL_DIR . DS . $model . '.php';
+			$this->$model = new $model(strtolower($model));
+		}
 	}
 
 	/**
@@ -294,7 +322,16 @@ class Ctrl {
 				$nav = 'admin';
 			}
 		}
-		$nav = array_merge($this->navLinks['default'], $this->navLinks[$nav]);
+		if($nav == 'admin') {
+			if($this->ctrl == 'admin') {
+				$nav = $this->navLinks['admin'];
+			} else {
+				$nav = $this->navLinks['default'];
+				$nav['left'] = $this->navLinks['admin']['left'];
+			}
+		} else {
+			$nav = array_merge($this->navLinks['default'], $this->navLinks[$nav]);
+		}
 		foreach ($nav as $url => $text) {
 			if($url == 'left' && is_array($text)) {
 				$html .= '<ul class="pull-right">';
@@ -303,7 +340,11 @@ class Ctrl {
 				}
 				$html .= '</ul>';
 			} else {
-				$html .= '<li' . ((REQUEST_URI == $url) ? ' class="active"' : '') . '><a href="' . url($url) . '">' . $text . '</a></li>' . "\n";
+				$html .= '<li';
+				if(($url && strpos(REQUEST_URI, $url) !== false) || $url == REQUEST_URI) {
+					$html .= ' class="active"';
+				}
+				$html .= '><a href="' . url($url) . '">' . $text . '</a></li>' . "\n";
 			}
 		}
 		$html .= '</ul>' . "\n";
@@ -321,6 +362,3 @@ class Ctrl {
 	}
 
 }
-
-
-?>

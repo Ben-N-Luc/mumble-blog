@@ -3,5 +3,3 @@
 class Config extends Model {
 
 }
-
-?>

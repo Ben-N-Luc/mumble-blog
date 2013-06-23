@@ -1,6 +1,6 @@
 <?php
 
-class contactCtrl extends Ctrl {
+class ticketCtrl extends Ctrl {
 
 	public $champs = array(
 		'mail',
@@ -16,7 +16,7 @@ class contactCtrl extends Ctrl {
 
 	public $allowed = 'connected';
 
-	public function contact() {
+	public function ticket() {
 
 		// Renvoi de l'adresse mail
 		$user = $this->Session->read('user');
@@ -32,14 +32,15 @@ class contactCtrl extends Ctrl {
 					$user = $this->Session->read('user');
 
 					$data = array(
-						'subject' => $this->Post->subject, ENT_HTML5, 'utf-8',
-						'content' => $this->Post->msg, ENT_HTML5, 'utf-8',
+						'subject' => $this->Post->subject,
+						'content' => $this->Post->msg,
 						'type' => $this->Post->type,
-						'date' => time(),
+						'date' => 'NOW()',
 						'user_id' => $user->id,
 						'mail' => $this->Post->mail
 					);
-					if ($this->Ticket->add($data)) {
+
+					if ($tmp = $this->Ticket->add($data)) {
 						$this->Session->setFlash("Votre message a bien été pris en compte !");
 					} else {
 						$this->Session->setFlash("Erreur lors de l'écriture en bdd !", 'error');
@@ -67,7 +68,44 @@ class contactCtrl extends Ctrl {
 		}
 	}
 
+	public function view() {
+		// Rejet divers
+		$user = $this->Session->read('user');
+		if(!isset($this->params[0]) || !is_numeric($this->params[0])) {
+			if($user->rank == 'a') {
+				$this->redirect(url('admin/tickets-list'));
+			} else {
+				$this->redirect(url('ticket/list'));
+			}
+		}
+		if($user->rank != 'a' && $user->id != $d['tickets']['master']->user_id) {
+			$this->Session->setFlash("Vous n'avez pas les droits nécessaires pour voir ce ticket");
+			$this->redirect(url());
+		}
+
+		$id = $this->params[0];
+		$d['id'] = $id;
+
+		$d['tickets']['master'] = $this->Ticket->search(array('id' => $id))[0];
+
+
+		$d['tickets']['answers'] = $this->Ticket->search(array(
+				'master' => $id
+			),
+			array(
+				'order' => array(
+					'field' => 'date',
+					'order' => 'ASC'
+				)
+			)
+		);
+
+		$d['tickets']['master']->date = date('d-m-Y H:i', strtotime($d['tickets']['master']->date));
+		foreach ($d['tickets']['answers'] as $k => $v) {
+			$d['tickets']['answers'][$k]->date = date('d-m-Y H:i', strtotime($v->date));
+		}
+
+		$this->set($d);
+	}
 
 }
-
-?>

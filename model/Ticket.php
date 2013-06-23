@@ -3,5 +3,3 @@
 class Ticket extends Model {
 
 }
-
-?>

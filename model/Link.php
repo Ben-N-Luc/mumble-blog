@@ -3,5 +3,3 @@
 class Link extends Model {
 
 }
-
-?>

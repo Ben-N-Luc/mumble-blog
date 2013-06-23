@@ -41,6 +41,3 @@ function error($message, $level = E_USER_NOTICE) {
     	exit();
     }
 }
-
-
-?>

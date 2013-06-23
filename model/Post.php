@@ -3,5 +3,3 @@
 class Post extends Model {
 
 }
-
-?>
