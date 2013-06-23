@@ -6,6 +6,9 @@ class Model {
 	public $primaryKey = 'id';
 	public $table = false;
 	public $lastRequest = false;
+	public $sqlFunctions = array(
+		'now'
+	);
 
 	public function __construct() {
 		//Initialisation de variables utiles...
@@ -13,17 +16,23 @@ class Model {
 			$this->table = strtolower(get_class($this)).'s';
 		}
 
-		// connection
-		if(!empty(self::$connection)) {
+		// Formatages des noms de fonctions SQL
+		foreach ($this->sqlFunctions as $k => $v) {
+			$this->sqlFunctions[$k] = strtoupper($v) . '()';
+		}
+
+		// Connexion à la bdd
+		if(self::$connection) {
 			return true;
 		}
+
 		try {
 			$db = new PDO('mysql:host='.Conf::$dbInfos['host'].';dbname='.Conf::$dbInfos['dbname'].';',
 					Conf::$dbInfos['user'],
 					Conf::$dbInfos['pwd'],
 					array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
 			);
-			Model::$connection = $db;
+			self::$connection = $db;
 		} catch(PDOException $e) {
 			if(Conf::$debugLvl) {
 				error($e->getMessage(), E_USER_ERROR);
@@ -32,6 +41,29 @@ class Model {
 				die('Connexion impossible à la base de données');
 			}
 		}
+	}
+
+	/**
+	 * Échappe une valeur grâce à la connexion ouverte
+	 * @param  string $value Valeur à échapper
+	 * @return string Valeur échappée
+	 */
+	protected function _quote($value) {
+		// Les fonctions SQL ne doivent pas être échapées
+		if(in_array($value, $this->sqlFunctions)) {
+			return $value;
+		}
+
+		return self::$connection->quote($value);
+	}
+
+	/**
+	 * Prépare une requête PDO
+	 * @param  string $sql Requête SQL
+	 * @return Object Objet PDO
+	 */
+	protected function _prepare($sql) {
+		return self::$connection->prepare($sql);
 	}
 
 	/**
@@ -44,11 +76,11 @@ class Model {
 		$values = array();
 		foreach ($data as $k => $v) {
 			$champs[] = $k;
-			$values[] = Model::$connection->quote($v);
+			$values[] = $this->_quote($v);
 		}
 		$sql = 'INSERT INTO ' . $this->table . ' (' . implode(', ', $champs) . ') VALUES (' . implode(', ', $values) . ')';
 
-		$pre = Model::$connection->prepare($sql);
+		$pre = $this->_prepare($sql);
 		$tmp = $pre->execute();
 		$this->lastRequest = $pre->queryString;
 		return $tmp;
@@ -63,6 +95,7 @@ class Model {
 	 */
 	public function search($cond, $param = array()) {
 		$sql = 'SELECT ';
+
 		if(isset($param['champs'])) {
 			$sql .= implode(', ', $param['champs']);
 		} else {
@@ -73,15 +106,23 @@ class Model {
 
 		if(!empty($cond)) {
 			$sql .= ' WHERE ';
-			$c = array();
-			foreach ($cond as $k => $v) {
-				if(!is_numeric($v)) {
-					$v = Model::$connection->quote($v);
+			if(is_array($cond)) {
+				$c = array();
+				foreach ($cond as $k => $v) {
+					if(is_int($k)) {
+						$c[] = $v;
+					} else {
+						if(!is_numeric($v)) {
+							$v = $this->_quote($v);
+						}
+						$c[] = $k . '=' . $v;
+					}
 				}
-				$c[] = $k . '=' . $v;
+				$glue = (isset($param['logical_term'])) ? ' ' . $param['logical_term'] . ' ' : ' AND ';
+				$sql .= implode($glue, $c);
+			} else {
+				$sql .= $cond;
 			}
-			$glue = (isset($param['logical_term'])) ? ' ' . $param['logical_term'] . ' ' : ' AND ';
-			$sql .= implode($glue, $c);
 		}
 
 		if(isset($param['order'])) {
@@ -96,9 +137,10 @@ class Model {
 			$sql .= ' LIMIT ' . $param['limit'];
 		}
 
-		$pre = Model::$connection->prepare($sql);
+		$pre = $this->_prepare($sql);
 		$pre->execute();
 		$this->lastRequest = $pre->queryString;
+
 		return $pre->fetchAll(PDO::FETCH_OBJ);
 	}
 
@@ -107,7 +149,6 @@ class Model {
 	 * @param array $cond Condition formatée pour $this->search
 	 */
 	public function del($cond) {
-
 		// Récupération des id des champs à supprimer
 		$tmp = $this->search($cond, array('champs' => array('id')));
 		$toDel = array();
@@ -122,11 +163,12 @@ class Model {
 		}
 
 		// construction de la requête
-		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $pk . '=' . Model::$connection->quote(implode(' OR ', $toDel));
+		$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $pk . '=' . $this->_quote(implode(' OR ', $toDel));
 
-		$pre = Model::$connection->prepare($sql);
+		$pre = $this->_prepare($sql);
 		$tmp = $pre->execute();
 		$this->lastRequest = $pre->queryString;
+
 		return $tmp;
 	}
 
@@ -145,7 +187,7 @@ class Model {
 
 		$changes = array();
 		foreach ($data as $k => $v) {
-			$changes[] = $k . '=' . Model::$connection->quote($v);
+			$changes[] = $k . '=' . $this->_quote($v);
 		}
 
 		$sql = 'UPDATE ' . $this->table . ' SET ';
@@ -155,14 +197,11 @@ class Model {
 		}
 		$sql .= ' WHERE ' . implode(' OR ', $toChange);
 
-
-		$pre = Model::$connection->prepare($sql);
+		$pre = $this->_prepare($sql);
 		$tmp = $pre->execute();
 		$this->lastRequest = $pre->queryString;
 
 		return $tmp;
-
-
 	}
 
 	/**
@@ -174,18 +213,14 @@ class Model {
 
 	/**
 	 * Permet d'envoyer une requêtes sql préformatée
-	 * @param string $request Requete SQL
-	 * @return boolean Réussite ou non de la requête
+	 * @param string $sql Requête SQL
 	 */
-	public function sql($request) {
-		$pre = Model::$connection->prepare($sql);
-		$tmp = $pre->execute();
+	public function sql($sql, $data = array()) {
+		$pre = $this->_prepare($sql);
 		$this->lastRequest = $pre->queryString;
+		$pre->execute($data);
 
-		return $tmp;
+		return $pre;
 	}
 
 }
-
-
-?>
