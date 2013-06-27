@@ -2,7 +2,7 @@
 
 class Ticket extends Model {
 
-	public function list($user_id = false) {
+	public function liste($user_id = false) {
 		if($user_id !== false) {
 			$cond = ' WHERE ticket.user_id=' . $user_id . ' ';
 		} else {

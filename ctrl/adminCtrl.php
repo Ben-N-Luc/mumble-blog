@@ -44,32 +44,6 @@ class adminCtrl extends Ctrl {
 		$this->set($d);
 	}
 
-	public function tickets() {
-		$this->tickets_list();
-	}
-
-	public function tickets_list() {
-		if(isset($this->params[0]) && is_numeric($this->params[0])) {
-			$user_id = $this->params[0];
-		} else {
-			$user_id = false;
-		}
-
-		$d['tickets'] = $this->Ticket->list($user_id);
-
-		foreach ($d['tickets'] as $k => $v) {
-			if(strlen($d['tickets'][$k]->ticket_content) > 800) {
-				$d['tickets'][$k]->ticket_content = substr($v->ticket_content, 0, 800) . '...';
-			}
-			$d['tickets'][$k]->ticket_date = ($v->ticket_date) ? date('d-m-Y H:i', strtotime($v->ticket_date)) : 'NaN';
-		}
-
-		$this->set($d);
-	}
-
-	public function tickets_close() {
-	}
-
 	public function posts_list() {
 		$d['posts'] = $this->Post->search(array(), array(
 			'order' => array(

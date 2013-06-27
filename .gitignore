@@ -10,7 +10,3 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
-
-# Private files
-Conf.php
-Viewer.php
