@@ -6,6 +6,7 @@
 		</div>
 		<div class="infos">
 			<ul>
+				<li>Type : <?= $tickets['master']->type ?></li>
 				<li>Date : <?= $tickets['master']->date ?></li>
 			</ul>
 		</div>
@@ -23,7 +24,7 @@
 			</div>
 		</article>
 	<?php endforeach; ?>
-	<form action="<?= url('ticket/view/' . $id) ?>">
+	<form action="<?= url('ticket/view/' . $id) ?>" method="post">
 		<label for="content"><h3>Répondre</h3></label>
 		<textarea name="content" id="content" class="input-xxlarge" rows="6"></textarea>
 		<div class="controls">

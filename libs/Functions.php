@@ -16,9 +16,9 @@ function debug($var) {
 	echo '<div class="debug-container">';
 	echo '<div class="debug">';
 	echo '<div class="info">';
-	echo 'Variable débugée ligne ' . $debug[0]['line'] . ' dans le fichier [' . str_replace(ROOT, 'ROOT' . DS, $debug[0]['file']) . ']';
+	echo 'Debug line ' . $debug[0]['line'] . ' in file [' . str_replace(ROOT, 'ROOT' . DS, $debug[0]['file']) . ']';
 	if(isset($debug[1])) {
-		echo ', fonction ';
+		echo ', function ';
 		if(isset($debug[1]['class'])) {
 			echo $debug[1]['class'] . '::';
 		}

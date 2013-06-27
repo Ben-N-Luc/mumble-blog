@@ -2,56 +2,64 @@
 
 class Ticket extends Model {
 
-	public function liste($user_id = false) {
-		if($user_id !== false) {
-			$cond = ' WHERE ticket.user_id=' . $user_id . ' ';
-		} else {
-			$cond = '';
+	public function liste(array $filtres = array()) {
+		$cond = '';
+		if(!empty($filtres)) {
+			$pieces = array();
+			foreach ($filtres as $k => $v) {
+				$pieces[] = $k . '=' . $this->_quote($v);
+			}
+			$cond = 'WHERE ' . implode(' AND ', $pieces);
 		}
 
-		return $this->sql(
-			'SELECT
-				ticket.id AS ticket_id,
-				ticket.subject AS ticket_subject,
-				ticket.content AS ticket_content,
-				ticket.type AS ticket_type,
-				ticket.closed AS ticket_closed,
-				answer.date AS ticket_date,
+		$sql = 'SELECT
+				ticket.id,
+				ticket.subject,
+				ticket.content,
+				ticket.type,
+				ticket.closed,
+				answer.date,
 				COUNT(answer.id) AS answers,
 				users.id AS user_id,
-				users.pseudo AS user_pseudo,
-				users.mail AS user_mail,
-				users.rank AS user_rank
+				users.pseudo,
+				users.mail,
+				users.rank
 			FROM tickets AS ticket
 			LEFT JOIN tickets AS answer ON(ticket.id = answer.master)
 			INNER JOIN users ON(users.id = ticket.user_id)
 			GROUP BY answer.master
 			HAVING COUNT(answer.id) > 0
-			' . $cond . '
+			' . $cond;
+		$sql .= ' UNION ';
+		$sql .= 'SELECT
+				ticket.id,
+				ticket.subject,
+				ticket.content,
+				ticket.type,
+				ticket.closed,
+				ticket.date,
+				0 AS answers,
+				users.id AS user_id,
+				users.pseudo,
+				users.mail,
+				users.rank
+			FROM tickets AS ticket
+			LEFT JOIN tickets AS answer ON(ticket.id = answer.master)
+			INNER JOIN users ON(users.id = ticket.user_id)
+			GROUP BY ticket.id, answer.master
+			HAVING COUNT(answer.id) = 0
+			' . $cond;
+		$sql .= ' ORDER BY closed ASC, date DESC';
 
-			UNION
+		return $this->sql($sql)->fetchAll(PDO::FETCH_OBJ);
+	}
 
-				SELECT
-					ticket.id AS ticket_id,
-					ticket.subject AS ticket_subject,
-					ticket.content AS ticket_content,
-					ticket.type AS ticket_type,
-					ticket.closed AS ticket_closed,
-					ticket.date AS ticket_date,
-					COUNT(answer.id) AS answers,
-					users.id AS user_id,
-					users.pseudo AS user_pseudo,
-					users.mail AS user_mail,
-					users.rank AS user_rank
-				FROM tickets AS ticket
-				LEFT JOIN tickets AS answer ON(ticket.id = answer.master)
-				INNER JOIN users ON(users.id = ticket.user_id)
-				GROUP BY answer.master
-				HAVING COUNT(answer.id) = 0
-				' . $cond . '
+	public function close($ticket_id) {
+		$this->update(array('id' => $ticket_id), array('closed' => 1));
+	}
 
-			ORDER BY ticket_closed DESC, ticket_date DESC'
-		)->fetchAll(PDO::FETCH_OBJ);
+	public function open($ticket_id) {
+		$this->update(array('id' => $ticket_id), array('closed' => 0));
 	}
 
 }

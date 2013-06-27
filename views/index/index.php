@@ -9,7 +9,7 @@
 		<article>
 			<h3>
 				<a href="<?= url('posts/view/' . $post->id) ?>"><?= $post->title ?></a>
-				<small style="font-family: arial"><?= date('d-m-Y H:i', strtotime($post->date)) ?></small>
+				<small><?= date('d-m-Y H:i', strtotime($post->date)) ?></small>
 			</h3>
 			<p>
 				<?= substr($post->content, 0, 500) ?>...

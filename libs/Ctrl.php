@@ -315,6 +315,22 @@ class Ctrl {
 		echo $html;
 	}
 
+	public function badge($text, $cat = false) {
+		if(array_key_exists($text, Conf::$ticketCategories) && !$cat) {
+			$html = '<a href="' . url('ticket/ticket/' . $text) . '" class="badge';
+			$html .= ' badge-' . Conf::$ticketCategories[$text]['type'] . ' ';
+			$html .= '">' . $text . '</a>';
+		} else {
+			$html = '<span class="badge';
+			if($cat) {
+				$html .= ' badge-' . $cat;
+			}
+			$html .= '">' . $text . '</span>';
+		}
+
+		return $html;
+	}
+
 	public function viewer() {
 		return false;
 

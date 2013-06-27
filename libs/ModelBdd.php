@@ -109,6 +109,8 @@ class Model {
 			if(is_array($cond)) {
 				$c = array();
 				foreach ($cond as $k => $v) {
+					// La clé ne représente pas un champs
+					// $v contient la condition !
 					if(is_int($k)) {
 						$c[] = $v;
 					} else {
@@ -191,10 +193,7 @@ class Model {
 		}
 
 		$sql = 'UPDATE ' . $this->table . ' SET ';
-		/* TO DO !!!! */
-		foreach ($data as $k => $v) {
-			$sql .= implode(', ', $changes);
-		}
+		$sql .= implode(', ', $changes);
 		$sql .= ' WHERE ' . implode(' OR ', $toChange);
 
 		$pre = $this->_prepare($sql);

@@ -28,6 +28,25 @@ class Conf {
 	 */
 	static $email = 'mumble@wtgeek.be';
 
+	static $ticketCategories = array(
+		'channel' => array(
+			'text' => 'Demande de salon',
+			'type' => 'info'
+		),
+		'tech' => array(
+			'text' => 'Problème technique',
+			'type' => 'warning'
+		),
+		'renseignement' => array(
+			'text' => 'Renseignement',
+			'type' => 'success'
+		),
+		'plainte' => array(
+			'text' => 'Plainte',
+			'type' => 'important'
+		)
+	);
+
 	/**
 	 * Contain all the navigation links
 	 */
@@ -51,7 +70,7 @@ class Conf {
 		),
 		'admin' => array(
 			'admin'            => 'Accueil',
-			'ticket/liste'     => 'Tickets',
+			'ticket'           => 'Tickets',
 			'admin/posts-list' => 'Posts',
 			'admin/tuto'       => 'Tuto',
 			'admin/users-list' => 'Users',

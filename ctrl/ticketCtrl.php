@@ -3,8 +3,6 @@
 class ticketCtrl extends Ctrl {
 
 	public $champs = array(
-		'mail',
-		'pseudo',
 		'subject',
 		'type',
 		'msg'
@@ -16,15 +14,72 @@ class ticketCtrl extends Ctrl {
 
 	public $allowed = 'connected';
 
+	/**
+	 * Liste des tickets
+	 *
+	 * @todo Pagination des tickets
+	 * @todo Filtres
+	 */
 	public function ticket() {
-
-		// Renvoi de l'adresse mail
 		$user = $this->Session->read('user');
-		if(!isset($user->mail)) {
-			$user->mail = false;
-		}
-		$this->set('mail', $user->mail);
 
+		// Lecture des paramètres
+		$filtres = array();
+		$user_id = false;
+		foreach ($this->params as $param) {
+			if(is_numeric($param)) {
+				$filtres['ticket.user_id'] = $param;
+				$user_id = $param;
+			} elseif(in_array($param, array('opened', 'closed'))) {
+				$filtres['ticket.closed'] = (int) ($param == 'closed');
+			} else {
+				foreach (Conf::$ticketCategories as $nom_categorie => $cat) {
+					$categories[] = $nom_categorie;
+				}
+				if(in_array($param, $categories)) {
+					$filtres['ticket.type'] = $param;
+				}
+			}
+		}
+
+		// Les non administrateurs accèdent uniquement à leurs tickets
+		// Les admins accèdent par défaut à tous les tickets
+		if($user->rank != 'a' && $user->id != $user_id) {
+			$user_id = $user->id;
+		}
+
+		$d['tickets'] = $this->Ticket->liste($filtres);
+
+		debug($this->Ticket->lastRequest);
+
+		foreach ($d['tickets'] as $k => $v) {
+			if(strlen($d['tickets'][$k]->content) > 800) {
+				$d['tickets'][$k]->content = substr($v->content, 0, 800) . '...';
+			}
+			$d['tickets'][$k]->date = ($v->date) ? date('d-m-Y H:i', strtotime($v->date)) : 'NaN';
+		}
+
+		if($user->id == $user_id) {
+			$d['user'] = $user->pseudo;
+		} elseif($user_id === false) {
+			$d['user'] = 'Tout le monde';
+		} else {
+			$user = $this->User->search(array('id' => $user_id));
+			if($user) {
+				$d['user'] = $user[0]->pseudo;
+			} else {
+				$this->Session->setFlash("L'utilisateur numéro $user_id n'existe pas !", 'error');
+				$this->redirect(url('ticket'));
+			}
+		}
+
+		$this->set($d);
+	}
+
+	/**
+	 * Gestion des nouveaux tickets
+	 */
+	public function nouveau() {
 		// test du formulaire
 		if(!empty($this->Post)) {
 			if(object_keys($this->Post) == $this->champs) {
@@ -34,10 +89,10 @@ class ticketCtrl extends Ctrl {
 					$data = array(
 						'subject' => $this->Post->subject,
 						'content' => $this->Post->msg,
-						'type' => $this->Post->type,
-						'date' => 'NOW()',
+						'type'    => $this->Post->type,
+						'date'    => 'NOW()',
 						'user_id' => $user->id,
-						'mail' => $this->Post->mail
+						'mail'    => $this->Post->mail
 					);
 
 					if ($tmp = $this->Ticket->add($data)) {
@@ -68,25 +123,45 @@ class ticketCtrl extends Ctrl {
 		}
 	}
 
+	/**
+	 * Vue complète d'un ticket
+	 */
 	public function view() {
-		// Rejet divers
+		// Vérification des paramètres
 		$user = $this->Session->read('user');
 		if(!isset($this->params[0]) || !is_numeric($this->params[0])) {
-			if($user->rank == 'a') {
-				$this->redirect(url('admin/tickets-list'));
-			} else {
-				$this->redirect(url('ticket/list'));
-			}
-		}
-		if($user->rank != 'a' && $user->id != $d['tickets']['master']->user_id) {
-			$this->Session->setFlash("Vous n'avez pas les droits nécessaires pour voir ce ticket");
-			$this->redirect(url());
+			$this->redirect(url('ticket'));
 		}
 
 		$id = $this->params[0];
 		$d['id'] = $id;
 
 		$d['tickets']['master'] = $this->Ticket->search(array('id' => $id))[0];
+
+		// Seul les admins peuvent accéder aux tickets des autres
+		if($user->rank != 'a' && $user->id != $d['tickets']['master']->user_id) {
+			$this->Session->setFlash("Vous n'avez pas les droits nécessaires pour voir ce ticket");
+			$this->redirect(url());
+		}
+
+		if($this->Posted) {
+			if(isset($this->Post->content)) {
+				$r = $this->Ticket->add(array(
+					'subject' => 'RE : ' . $d['tickets']['master']->subject,
+					'content' => $this->Post->content,
+					'date' => 'NOW()',
+					'user_id' => $user->id,
+					'master' => $d['tickets']['master']->id
+				));
+				if($r) {
+					$this->Session->setFlash('Votre réponse a bien été ajoutée', 'success');
+				} else {
+					$this->Session->setFlash("Erreur lors de l'ajout de votre réponse", 'error');
+				}
+			} else {
+				$this->Session->setFlash('Formulaire incorrect', 'error');
+			}
+		}
 
 		$d['tickets']['answers'] = $this->Ticket->search(array(
 				'master' => $id
@@ -107,32 +182,31 @@ class ticketCtrl extends Ctrl {
 		$this->set($d);
 	}
 
-	public function liste() {
-		$user = $this->Session->read('user');
-
-		if(isset($this->params[0]) && is_numeric($this->params[0])) {
-			$user_id = $this->params[0];
-		} else {
-			$user_id = false;
-		}
-
-		if($user->rank != 'a' && $user->id != $user_id) {
-			$user_id = $user->id;
-		}
-
-		$d['tickets'] = $this->Ticket->liste($user_id);
-
-		foreach ($d['tickets'] as $k => $v) {
-			if(strlen($d['tickets'][$k]->ticket_content) > 800) {
-				$d['tickets'][$k]->ticket_content = substr($v->ticket_content, 0, 800) . '...';
-			}
-			$d['tickets'][$k]->ticket_date = ($v->ticket_date) ? date('d-m-Y H:i', strtotime($v->ticket_date)) : 'NaN';
-		}
-
-		$this->set($d);
-	}
-
 	public function close() {
+		if(!isset($this->params[0]) || !is_numeric($this->params[0])) {
+			$this->Session->setFlash('Numéro de ticket incorrect', 'error');
+			$this->redirect(url('ticket'));
+		} else {
+			$ticket_id = $this->params[0];
+		}
+
+		$master = $this->Ticket->search(array('id' => $ticket_id))[0];
+
+		$user = $this->Session->read('user');
+		if($user->rank == 'a' || $master->id == $user->id) {
+			if($master->closed == '1') {
+				$this->Ticket->open($ticket_id);
+				$this->Session->setFlash('Ticket rouvert', 'success');
+			} else {
+				$this->Ticket->close($ticket_id);
+				$this->Session->setFlash('Ticket fermé', 'success');
+			}
+
+			$this->redirect(url('ticket/view/' . $ticket_id));
+		} else {
+			$this->Session->setFlash("Droits d'accès incorrects", 'error');
+			$this->redirect(url('ticket'));
+		}
 	}
 
 }
