@@ -2,43 +2,6 @@
 
 class Ctrl {
 
-	/**
-	 * Contain all the navigation links
-	 */
-	public $navLinks = array(
-		'default' => array(
-			''             => 'Accueil',
-			'informations' => 'Informations',
-			'tutoriel'     => 'Tuto',
-			'ticket'       => 'Ticket'
-		),
-		'public' => array(
-			'left' => array(
-				'connexion' => 'Connexion'
-			)
-		),
-		'connected' => array(
-			'left' => array(
-				'compte'             => 'Mon compte',
-				'compte/deconnexion' => 'Déconnexion'
-			)
-		),
-		'admin' => array(
-			'admin'              => 'Accueil',
-			'admin/tickets'      => 'Tickets',
-			'admin/posts-list'   => 'Posts',
-			'admin/tuto'         => 'Tuto',
-			'admin/users-list'   => 'Users',
-			'admin/mumble'       => 'Le serveur',
-			''                   => 'Le site',
-			'left'    => array(
-				'compte'             => 'Mon compte',
-				'admin'              => 'Administration',
-				'compte/deconnexion' => 'Déconnexion'
-			)
-		)
-	);
-
 	public $Styles = array(
 		'bootstrap.less',
 		'style.less'
@@ -324,13 +287,13 @@ class Ctrl {
 		}
 		if($nav == 'admin') {
 			if($this->ctrl == 'admin') {
-				$nav = $this->navLinks['admin'];
+				$nav = Conf::$navLinks['admin'];
 			} else {
-				$nav = $this->navLinks['default'];
-				$nav['left'] = $this->navLinks['admin']['left'];
+				$nav = Conf::$navLinks['default'];
+				$nav['left'] = Conf::$navLinks['admin']['left'];
 			}
 		} else {
-			$nav = array_merge($this->navLinks['default'], $this->navLinks[$nav]);
+			$nav = array_merge(Conf::$navLinks['default'], Conf::$navLinks[$nav]);
 		}
 		foreach ($nav as $url => $text) {
 			if($url == 'left' && is_array($text)) {
