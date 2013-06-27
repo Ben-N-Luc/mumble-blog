@@ -88,7 +88,6 @@ class ticketCtrl extends Ctrl {
 
 		$d['tickets']['master'] = $this->Ticket->search(array('id' => $id))[0];
 
-
 		$d['tickets']['answers'] = $this->Ticket->search(array(
 				'master' => $id
 			),
