@@ -69,7 +69,7 @@ class Session {
 			} elseif($flash['type'] == 'success') {
 				$html .= '<span class="icon-ok-circle"></span> ';
 			}
-			$html .= $flash['msg'] . '<button type="button" class="close" data-dismiss="alert">×</button></div>';
+			$html .= $flash['msg'] . '...<button type="button" class="close" data-dismiss="alert">×</button></div>';
 			$this->write('flash', array());
 		}
 		return $html;

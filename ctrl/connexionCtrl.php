@@ -60,7 +60,7 @@ class connexionCtrl extends Ctrl {
 							if($this->User->add($data)) {
 								$this->Session->setFlash('Vous êtes bien inscrit', "success");
 							} else {
-								$this->Session->setFlash('Erreur interne, réessayez plus tard...', 'error');
+								$this->Session->setFlash('Erreur interne, réessayez plus tard', 'error');
 								$this->Log->add(array(
 									'message' => "Erreur interne lors de l'inscription sur la requête " . $this->User->lastRequest,
 									'token' => 'internal error'

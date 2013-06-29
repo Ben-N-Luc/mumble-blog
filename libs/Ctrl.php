@@ -85,7 +85,6 @@ class Ctrl {
 			|| ($this->allowed == 'connected' && $user->rank != 'u' && $user->rank != 'a')
 			|| ($this->allowed == 'admin' && $user->rank != 'a')) {
 				$this->Session->setFlash('Connectez-vous !', 'warning');
-				$this->Log->add(array("Tentative d'accès à une page sécurisée (/" . REQUEST_URI . ")", 'not conected'));
 				$this->redirect(url($this->connectionUrl), 403);
 			}
 		}
