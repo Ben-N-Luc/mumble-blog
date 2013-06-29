@@ -9,7 +9,7 @@ class ticketCtrl extends Ctrl {
 	);
 
 	public $uses = array(
-		'Models' => array('User', 'Ticket')
+		'Models' => array('User', 'Ticket', 'Answer')
 	);
 
 	public $allowed = 'connected';
@@ -25,19 +25,20 @@ class ticketCtrl extends Ctrl {
 
 		// Lecture des paramètres
 		$filtres = array();
+		$categories = array();
 		$user_id = false;
+		foreach (Conf::$ticketCategories as $nom_categorie => $cat) {
+			$categories[] = $nom_categorie;
+		}
 		foreach ($this->params as $param) {
 			if(is_numeric($param)) {
-				$filtres['ticket.user_id'] = $param;
+				$filtres['tickets.user_id'] = $param;
 				$user_id = $param;
 			} elseif(in_array($param, array('opened', 'closed'))) {
-				$filtres['ticket.closed'] = (int) ($param == 'closed');
+				$filtres['tickets.closed'] = (int) ($param == 'closed');
 			} else {
-				foreach (Conf::$ticketCategories as $nom_categorie => $cat) {
-					$categories[] = $nom_categorie;
-				}
 				if(in_array($param, $categories)) {
-					$filtres['ticket.type'] = $param;
+					$filtres['tickets.type'] = $param;
 				}
 			}
 		}
@@ -45,18 +46,22 @@ class ticketCtrl extends Ctrl {
 		// Les non administrateurs accèdent uniquement à leurs tickets
 		// Les admins accèdent par défaut à tous les tickets
 		if($user->rank != 'a' && $user->id != $user_id) {
+			$filtres['tickets.user_id'] = $user->id;
 			$user_id = $user->id;
 		}
 
 		$d['tickets'] = $this->Ticket->liste($filtres);
 
-		debug($this->Ticket->lastRequest);
-
 		foreach ($d['tickets'] as $k => $v) {
 			if(strlen($d['tickets'][$k]->content) > 800) {
 				$d['tickets'][$k]->content = substr($v->content, 0, 800) . '...';
 			}
-			$d['tickets'][$k]->date = ($v->date) ? date('d-m-Y H:i', strtotime($v->date)) : 'NaN';
+
+			if($v->last_answer) {
+				$d['tickets'][$k]->date = date(Conf::$dateFormat, strtotime($v->last_answer));
+			} else {
+				$d['tickets'][$k]->date = date(Conf::$dateFormat, strtotime($v->date));
+			}
 		}
 
 		if($user->id == $user_id) {
@@ -83,38 +88,33 @@ class ticketCtrl extends Ctrl {
 		// test du formulaire
 		if(!empty($this->Post)) {
 			if(object_keys($this->Post) == $this->champs) {
-				if(filter_var($this->Post->mail, FILTER_VALIDATE_EMAIL)) {
-					$user = $this->Session->read('user');
+				$user = $this->Session->read('user');
 
-					$data = array(
-						'subject' => $this->Post->subject,
-						'content' => $this->Post->msg,
-						'type'    => $this->Post->type,
-						'date'    => 'NOW()',
-						'user_id' => $user->id,
-						'mail'    => $this->Post->mail
-					);
+				$data = array(
+					'subject' => $this->Post->subject,
+					'content' => $this->Post->msg,
+					'type'    => $this->Post->type,
+					'date'    => 'NOW()',
+					'user_id' => $user->id
+				);
 
-					if ($tmp = $this->Ticket->add($data)) {
-						$this->Session->setFlash("Votre message a bien été pris en compte !");
-					} else {
-						$this->Session->setFlash("Erreur lors de l'écriture en bdd !", 'error');
-					}
-
-					// envoie du mail sur l'adresse partagée
-					$mail = new Mail(
-						$this->Post->mail,
-						'Formulaire de contact Mumble',
-						'Nouveau message sur le <a href="mumble.wtgeek.be">site</a>, de la part de '.
-						$this->Post->pseudo . ', sujet : ' . $this->Post->subject . ', type : ' . $this->Post->type
-					);
-					if($mail->send()) {
-						$this->Session->setFlash('Votre message à bien été envoyé', 'success');
-					} else {
-						$this->Session->setFlash("Erreur lors de l'envoi du mail à un admin, il ne verra pas le ticket avant sa prochaine connexion...", 'error');
-					}
+				if ($tmp = $this->Ticket->add($data)) {
+					$this->Session->setFlash("Votre message a bien été pris en compte !");
 				} else {
-					$this->Session->setFlash('Mauvaise adresse Email', 'error');
+					$this->Session->setFlash("Erreur lors de l'écriture en bdd !", 'error');
+				}
+
+				// envoie du mail sur l'adresse partagée
+				$mail = new Mail(
+					$user->mail,
+					'Formulaire de contact Mumble',
+					'Nouveau message sur le <a href="mumble.wtgeek.be">site</a>, de la part de '.
+					$user->pseudo . ', sujet : ' . $this->Post->subject . ', type : ' . $this->Post->type
+				);
+				if($mail->send()) {
+					$this->Session->setFlash('Votre message à bien été envoyé', 'success');
+				} else {
+					$this->Session->setFlash("Erreur lors de l'envoi du mail à un admin, il ne verra pas le ticket avant sa prochaine connexion", 'warning');
 				}
 			} else {
 				$this->Session->flash('Tous les champs sont requis', 'error');
@@ -146,12 +146,11 @@ class ticketCtrl extends Ctrl {
 
 		if($this->Posted) {
 			if(isset($this->Post->content)) {
-				$r = $this->Ticket->add(array(
-					'subject' => 'RE : ' . $d['tickets']['master']->subject,
+				$r = $this->Answer->add(array(
 					'content' => $this->Post->content,
 					'date' => 'NOW()',
 					'user_id' => $user->id,
-					'master' => $d['tickets']['master']->id
+					'ticket_id' => $d['tickets']['master']->id
 				));
 				if($r) {
 					$this->Session->setFlash('Votre réponse a bien été ajoutée', 'success');
@@ -163,8 +162,8 @@ class ticketCtrl extends Ctrl {
 			}
 		}
 
-		$d['tickets']['answers'] = $this->Ticket->search(array(
-				'master' => $id
+		$d['tickets']['answers'] = $this->Answer->search(array(
+				'ticket_id' => $id
 			),
 			array(
 				'order' => array(
@@ -174,9 +173,9 @@ class ticketCtrl extends Ctrl {
 			)
 		);
 
-		$d['tickets']['master']->date = date('d-m-Y H:i', strtotime($d['tickets']['master']->date));
+		$d['tickets']['master']->date = date(Conf::$dateFormat, strtotime($d['tickets']['master']->date));
 		foreach ($d['tickets']['answers'] as $k => $v) {
-			$d['tickets']['answers'][$k]->date = date('d-m-Y H:i', strtotime($v->date));
+			$d['tickets']['answers'][$k]->date = date(Conf::$dateFormat, strtotime($v->date));
 		}
 
 		$this->set($d);

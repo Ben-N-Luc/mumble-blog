@@ -24,9 +24,9 @@
 			</div>
 			<div class="infos">
 				<ul>
-					<li>Utilisateur : <?= $ticket->pseudo ?></li>
+					<li>Utilisateur : <a href="<?= url('ticket/ticket/' . $ticket->user_id) ?>"><?= $ticket->pseudo ?></a></li>
 					<li>Réponses : <?= $ticket->answers ?></li>
-					<li>Dernière réponse : <?= $ticket->date ?></li>
+					<li><?= $ticket->date ?></li>
 					<li><?= $this->badge($ticket->type) ?></li>
 					<li>
 						<a href="<?= url('ticket/view/' . $ticket->id) ?>" class="btn">

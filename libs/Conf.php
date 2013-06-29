@@ -84,4 +84,6 @@ class Conf {
 		)
 	);
 
+	static $dateFormat = 'H\hi d-m-Y';
+
 }

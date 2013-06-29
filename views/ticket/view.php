@@ -6,14 +6,14 @@
 		</div>
 		<div class="infos">
 			<ul>
-				<li>Type : <?= $tickets['master']->type ?></li>
+				<li><?= $this->badge($tickets['master']->type) ?></li>
 				<li>Date : <?= $tickets['master']->date ?></li>
 			</ul>
 		</div>
 	</article>
 	<?php foreach($tickets['answers'] as $answer): ?>
 		<article>
-			<h3><?= $answer->subject ?></h3>
+			<h3>RE : <?= $tickets['master']->subject ?></h3>
 			<div class="msg">
 				<?= $answer->content ?>
 			</div>
