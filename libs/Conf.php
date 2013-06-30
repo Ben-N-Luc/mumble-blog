@@ -3,11 +3,6 @@
 class Conf {
 
 	/**
-	 * Don't change that !
-	 */
-	static $db = true;
-
-	/**
 	 * DB informations (associative array with 'host', 'user', 'pwd', 'dbname' !)
 	 */
 	static $dbInfos = array(
