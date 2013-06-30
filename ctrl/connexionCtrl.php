@@ -36,9 +36,10 @@ class connexionCtrl extends Ctrl {
 					}
 				} else {
 					$this->Session->setFlash('Erreur, vérifiez vos informations', 'error');
+					$this->Form->errors = $this->User->errors;
 				}
 			} else {
-				// code...
+
 			}
 		}
 	}
