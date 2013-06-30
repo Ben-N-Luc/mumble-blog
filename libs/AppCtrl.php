@@ -2,11 +2,6 @@
 
 class AppCtrl {
 
-	public $Styles = array(
-		'bootstrap.less',
-		'style.less'
-	);
-
 	/**
 	 * Contiendra l'objet de session
 	 */
@@ -50,7 +45,12 @@ class AppCtrl {
 	 */
 	public $Layout = 'layout';
 
+	public $Styles = array(
+		'bootstrap.less',
+		'style.less'
+	);
 	public $Less;
+	protected $_Css
 
 	/**
 	 * Récupération des variables $_POST et $_GET,
@@ -87,7 +87,7 @@ class AppCtrl {
 		$this->Less->setVariables(array(
 			'webroot' => "'" . URL_ROOT . "'"
 		));
-		$this->Css = '';
+		$this->_Css = '';
 		foreach ($this->Styles as $v) {
 			$tmp = explode('.', $v);
 			$extension = array_pop($tmp);
@@ -95,7 +95,7 @@ class AppCtrl {
 			if($extension == 'less') {
 				$recompiled = $this->Less->checkedCompile(LESS_DIR . DS . $v, WEBROOT_DIR . DS . 'css' . DS . $name . '.css');
 			}
-			$this->Css .= file_get_contents(WEBROOT_DIR . DS . 'css' . DS . $name . '.css') . "\n";
+			$this->_Css .= file_get_contents(WEBROOT_DIR . DS . 'css' . DS . $name . '.css') . "\n";
 		}
 
 		// Lancement de la fonction principale
