@@ -10,7 +10,6 @@
 		<title><?php echo (isset($title_for_layout)) ? $title_for_layout . ' - Mumble blog' : "Mumble blog"; ?></title>
 	</head>
 	<body>
-		<!-- Un commentaire pour tester GitHub -->
 		<div class="global">
 			<?php echo $this->nav(); ?>
 			<div class="content">
