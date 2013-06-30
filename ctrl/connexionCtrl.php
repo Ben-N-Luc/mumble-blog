@@ -25,6 +25,7 @@ class connexionCtrl extends Ctrl {
 				}
 
 				if ($this->User->validates($this->Request->post)) {
+					$this->Request->post->password = sha1($this->Request->post->password);
 					if ($this->User->add($data)) {
 						$this->Session->setFlash('Vous êtes bien inscrit', 'success');
 					} else {
@@ -39,7 +40,25 @@ class connexionCtrl extends Ctrl {
 					$this->Form->errors = $this->User->errors;
 				}
 			} else {
+				// Connexion
+				$user = current($this->User->search(
+					array('pseudo' => $this->Request->post->log_pseudo)
+				));
 
+				if ($user && $user->password == sha1($this->Request->post->log_password)) {
+					unset($user->password);
+					$this->Session->auth($user);
+					$this->Session->setFlash('Vous êtes bien connecté', 'success');
+					$this->redirect(url());
+				}
+				else {
+					$this->Form->errors['log_pseudo'] = 'Pseudo incorrect ou innexistant.';
+					if ($user->password != sha1($this->Request->post->log_password)) {
+						$this->Form->errors['log_password'] = 'Mot de passe incorrect.';
+					}
+
+					$this->Session->setFlash('Erreur lors de la connexion', 'error');
+				}
 			}
 		}
 	}
