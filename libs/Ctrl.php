@@ -74,6 +74,6 @@ class Ctrl extends AppCtrl {
 	}
 
 	public function css() {
-		echo $this->_Css
+		echo $this->_Css;
 	}
 }
