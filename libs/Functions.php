@@ -8,10 +8,10 @@ function debug($var) {
 	$debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 	echo '<style>';
 	echo '.debug-container { text-align: center; color: #222; }';
-	echo '.debug { display: inline-block; clear: both; background-color: rgba(255,30,30, 0.8); max-width: 90%; margin: 10px auto; padding: 5px; border-radius: 10px; border: 1px solid #ddd; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); font-family: Courier; }';
-	echo '.debug .info, .debug pre { padding: 5px 8px; border: 1px solid #666; background-color: rgba(255,255,255,0.85); border-radius: 7px; box-shadow: 0 0 4px rgba(0,0,0,0.6); text-align: left; }';
-	echo '.debug .info { margin: 15px 15px 7px 15px; }';
-	echo '.debug pre { margin: 0 15px 15px 15px; }';
+	echo '.debug { display: inline-block; clear: both; background-color: rgba(255,30,30, 0.8); max-width: 90%; margin: 10px auto; padding: 5px; border-radius: 10px; border: 1px solid #ddd; box-shadow: inset 0 0 2px rgba(0,0,0,0.8); font-family: Courier; }';
+	echo '.debug .info, .debug pre { padding: 5px 8px; border: 1px solid #666; background-color: rgba(255,255,255,0.85); border-radius: 7px; box-shadow: 0 0 1px rgba(0,0,0,0.6); text-align: left; }';
+	echo '.debug .info { margin: 3px 3px; }';
+	echo '.debug pre { margin: 3px; }';
 	echo '</style>';
 	echo '<div class="debug-container">';
 	echo '<div class="debug">';
