@@ -1,5 +1,5 @@
 <section class="middle">
-	<h2>Dernières news</h2>
+	<h2><a href="<?= url('posts') ?>">Dernières news</a></h2>
 	<?php if (empty($posts)): ?>
 		<article>
 			Pas de news pour le moment...
