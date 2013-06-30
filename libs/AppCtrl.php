@@ -79,7 +79,7 @@ class AppCtrl {
 		}
 
 		$this->Request = new Request($ctrl, $action, $params);
-		$this->Form = new Form($this);
+		//$this->Form = new Form($this);
 
 		// Génération du css lessPHP
 		$this->Less = new lessc;
@@ -95,7 +95,8 @@ class AppCtrl {
 			if($extension == 'less') {
 				$recompiled = $this->Less->checkedCompile(LESS_DIR . DS . $v, WEBROOT_DIR . DS . 'css' . DS . $name . '.css');
 			}
-			$this->Css .= file_get_contents(WEBROOT_DIR . DS . 'css' . DS . $name . '.css') . "\n";
+
+			$this->Css .= '<link href="' . url('css/' . $name . '.css') . '" rel="stylesheet">' . "\n";
 		}
 
 		// Lancement de la fonction principale
