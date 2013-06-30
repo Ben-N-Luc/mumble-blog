@@ -26,15 +26,10 @@ class connexionCtrl extends Ctrl {
 
 				if ($this->User->validates($this->Request->post)) {
 					$this->Request->post->password = sha1($this->Request->post->password);
-					if ($this->User->add($data)) {
-						$this->Session->setFlash('Vous êtes bien inscrit', 'success');
-					} else {
-						$this->Session->setFlash('Erreur interne, réessayez plus tard', 'error');
-						$this->Log->add(array(
-							'message' => "Erreur interne lors de l'inscription sur la requête " . $this->User->lastRequest,
-							'token' => 'internal error'
-						));
-					}
+					unset($this->Request->post->action);
+					$this->User->add($this->Request->post);
+					$this->Request->post = new stdClass();
+					$this->Session->setFlash('Vous êtes bien inscrit', 'success');
 				} else {
 					$this->Session->setFlash('Erreur, vérifiez vos informations', 'error');
 					$this->Form->errors = $this->User->errors;
@@ -52,8 +47,10 @@ class connexionCtrl extends Ctrl {
 					$this->redirect(url());
 				}
 				else {
-					$this->Form->errors['log_pseudo'] = 'Pseudo incorrect ou innexistant.';
-					if ($user->password != sha1($this->Request->post->log_password)) {
+					if (!$user) {
+						$this->Form->errors['log_pseudo'] = 'Pseudo incorrect ou innexistant.';
+					}
+					if ($user && $user->password != sha1($this->Request->post->log_password)) {
 						$this->Form->errors['log_password'] = 'Mot de passe incorrect.';
 					}
 
