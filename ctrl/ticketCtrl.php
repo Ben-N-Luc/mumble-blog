@@ -136,7 +136,8 @@ class ticketCtrl extends Ctrl {
 		$id = $this->params[0];
 		$d['id'] = $id;
 
-		$d['tickets']['master'] = $this->Ticket->search(array('id' => $id))[0];
+		$tmp = $this->Ticket->search(array('id' => $id));
+		$d['tickets']['master'] = $tmp[0];
 
 		// Seul les admins peuvent accéder aux tickets des autres
 		if($user->rank != 'a' && $user->id != $d['tickets']['master']->user_id) {
@@ -189,7 +190,8 @@ class ticketCtrl extends Ctrl {
 			$ticket_id = $this->params[0];
 		}
 
-		$master = $this->Ticket->search(array('id' => $ticket_id))[0];
+		$mtp = $this->Ticket->search(array('id' => $ticket_id));
+		$master = $tmp[0];
 
 		$user = $this->Session->read('user');
 		if($user->rank == 'a' || $master->id == $user->id) {

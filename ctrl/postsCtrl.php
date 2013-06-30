@@ -26,9 +26,10 @@ class postsCtrl extends Ctrl {
 			$this->redirect(url('posts'));
 		}
 
-		$d['post'] = $this->Post->search(array(
+		$tmp = $this->Post->search(array(
 			'id' => $this->params[0]
-		))[0];
+		));
+		$d['post'] = $tmp[0];
 
 		if(!$d['post']->online && $this->Session->read('user')->rank != 'a') {
 			$this->redirect(url('posts'));
