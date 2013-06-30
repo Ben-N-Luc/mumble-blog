@@ -13,21 +13,6 @@ class Ctrl {
 	public $Session;
 
 	/**
-	 * Contiendra la variable $_GET en tant qu'objet (échappée)
-	 */
-	public $Get;
-
-	/**
-	 * Contiendra la variable $_POST en tant qu'objet (échappée)
-	 */
-	public $Post;
-
-	/**
-	 * Contiendra true si un post a été effectué
-	 */
-	public $Posted = false;
-
-	/**
 	 * Modèles à charger dans tous les controllers
 	 */
 	public $DefaultModels = array('Config');
