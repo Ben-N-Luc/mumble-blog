@@ -11,10 +11,18 @@ class Conf {
 	 * DB informations (associative array with 'host', 'user', 'pwd', 'dbname' !)
 	 */
 	static $dbInfos = array(
-		'host'   	=> 'localhost',
-		'user'   	=> 'root',
-		'pwd'    	=> '',
-		'dbname' 	=> 'mumble-blog'
+		'local' => array(
+			'host'   	=> 'localhost',
+			'user'   	=> 'root',
+			'pwd'    	=> '',
+			'dbname' 	=> 'mumble-blog'
+		),
+		'online' => array(
+			'host'   	=> 'localhost',
+			'user'   	=> 'u20470',
+			'pwd'    	=> 'LCIVKBILSB',
+			'dbname' 	=> 'db20470'
+		)
 	);
 
 	/**

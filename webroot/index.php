@@ -14,6 +14,7 @@ define('CTRL_DIR', ROOT . 'ctrl');
 define('DATA_DIR', ROOT . 'data');
 define('MODEL_DIR', ROOT . 'model');
 define('LESS_DIR', ROOT . 'less');
+define('ONLINE', (DS == '/'));
 
 // Libs inclusion
 include LIBS_DIR . DS . 'Includes.php';

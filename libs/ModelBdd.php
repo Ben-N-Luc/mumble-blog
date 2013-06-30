@@ -27,9 +27,10 @@ class Model {
 		}
 
 		try {
-			$db = new PDO('mysql:host='.Conf::$dbInfos['host'].';dbname='.Conf::$dbInfos['dbname'].';',
-					Conf::$dbInfos['user'],
-					Conf::$dbInfos['pwd'],
+			$dbInfos = (ONLINE) ? Conf::$dbInfos['online'] : Conf::$dbInfos['local'];
+			$db = new PDO('mysql:host='.$dbInfos['host'].';dbname='.$dbInfos['dbname'].';',
+					$dbInfos['user'],
+					$dbInfos['pwd'],
 					array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
 			);
 			self::$connection = $db;
