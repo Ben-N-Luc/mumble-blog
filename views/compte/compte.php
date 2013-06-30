@@ -12,7 +12,7 @@
 				<?= $user->mail ?>
 			</li>
 			<li>
-				<?= ($user->rank == 'a') ? 'admin' : 'utilisateur' ?>
+				<?= ($user->rank == 'a') ? 'Administrateur' : 'Utilisateur' ?>
 			</li>
 		</ul>
 		<div class="actions">
