@@ -46,7 +46,7 @@ class AppModel {
 	 */
 	protected function _quote($value) {
 		// Les fonctions SQL ne doivent pas être échapées
-		if(in_array($value, $this->sqlFunctions)) {
+		if(in_array($value, $this->_sqlFunctions)) {
 			return $value;
 		}
 
