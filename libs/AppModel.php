@@ -1,12 +1,12 @@
 <?php
 
-class Model {
+class AppModel {
 
 	static $connection = false;
 	public $primaryKey = 'id';
 	public $table = false;
 	public $lastRequest = false;
-	public $sqlFunctions = array(
+	protected $_sqlFunctions = array(
 		'now'
 	);
 	public $validate = array();
