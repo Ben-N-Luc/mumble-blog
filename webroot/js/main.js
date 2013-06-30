@@ -41,7 +41,7 @@ jQuery(function($) {
 			$('nav ul li').stop().slideToggle(300);
 		});
 
-	log('Parsley loaded');
+	log('Loading Parsley...');
 	$('form.parsley').parsley({
 		successClass: 'success',
 		errorClass: 'warning',
@@ -84,4 +84,5 @@ jQuery(function($) {
 			, lessthan:       "Cette valeur doit être plus petite que %s."
 		}
 	});
+	log('Parsley Loaded');
 });

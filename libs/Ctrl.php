@@ -93,10 +93,7 @@ class Ctrl {
 			}
 		}
 
-		// Stockage des informations de la classe
-		$this->ctrl = $ctrl;
-		$this->action = str_replace('-', '_', $action);
-		$this->params = $params;
+		$this->Request = new Request($ctrl, $action, $params);
 
 		// Génération du css lessPHP
 		$this->Less = new lessc;
@@ -115,31 +112,12 @@ class Ctrl {
 			$this->Css .= file_get_contents(WEBROOT_DIR . DS . 'css' . DS . $name . '.css') . "\n";
 		}
 
-		// Précréation des objets Params, Post et Get
-		if(!empty($_POST)) {
-			$this->Post = new stdClass();
-			$this->Posted = true;
-		}
-		if(!empty($_GET)) {
-			$this->Get = new stdClass();
-		}
-
-		// Récupération du post
-		foreach ($_POST as $k => $v) {
-			$this->Post->$k = htmlentities($v, ENT_QUOTES, 'utf-8');
-		}
-
-		// Récupération du get
-		foreach ($_GET as $k => $v) {
-			$this->Get->$k = urldecode($v);
-		}
-
 		// Lancement de la fonction principale
-		if(in_array($this->action, array_diff(get_class_methods($this), get_class_methods('Ctrl')))) {
-			$this->{$this->action}();
+		if(in_array($this->Request->action, array_diff(get_class_methods($this), get_class_methods('Ctrl')))) {
+			$this->{$this->Request->action}();
 		} else {
 			require CTRL_DIR . DS . 'e404Ctrl.php';
-			$ctrl = new e404Ctrl('e404', 'e404', array('Method not found (' . $this->action . ')'));
+			$ctrl = new e404Ctrl('e404', 'e404', array('Method not found (' . $this->Request->action . ')'));
 			exit();
 		}
 
@@ -153,13 +131,13 @@ class Ctrl {
 		 * Chargement de la vue
 		 */
 		ob_start();
-		if(is_file(VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php')) {
-			require VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php';
+		if(is_file(VIEWS_DIR . DS . $this->Request->ctrl . DS . $this->Request->action . '.php')) {
+			require VIEWS_DIR . DS . $this->Request->ctrl . DS . $this->Request->action . '.php';
 		} elseif($ctrl == '') {
 			require VIEWS_DIR . DS . 'index' . DS . 'index.php';
 		} else {
 			header("HTTP/1.0 404 Not Found");
-			$msg = 'View not found (' . VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php)';
+			$msg = 'View not found (' . VIEWS_DIR . DS . $this->Request->ctrl . DS . $this->Request->action . '.php)';
 			require VIEWS_DIR . DS . 'e404' . DS . 'e404.php';
 		}
 		$content_for_layout = ob_get_clean();
@@ -179,8 +157,8 @@ class Ctrl {
 	}
 
 	public function loadModel($model) {
+		$model = ucfirst($model);
 		if(!isset($this->$model) || $this->$model === false) {
-			$model = ucfirst($model);
 			require_once MODEL_DIR . DS . $model . '.php';
 			$this->$model = new $model(strtolower($model));
 		}
@@ -282,7 +260,7 @@ class Ctrl {
 			}
 		}
 		if($nav == 'admin') {
-			if($this->ctrl == 'admin') {
+			if($this->Request->ctrl == 'admin') {
 				$nav = Conf::$navLinks['admin'];
 			} else {
 				$nav = Conf::$navLinks['default'];

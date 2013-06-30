@@ -30,7 +30,7 @@ class ticketCtrl extends Ctrl {
 		foreach (Conf::$ticketCategories as $nom_categorie => $cat) {
 			$categories[] = $nom_categorie;
 		}
-		foreach ($this->params as $param) {
+		foreach ($this->Request->params as $param) {
 			if(is_numeric($param)) {
 				$filtres['tickets.user_id'] = $param;
 				$user_id = $param;
@@ -129,11 +129,11 @@ class ticketCtrl extends Ctrl {
 	public function view() {
 		// Vérification des paramètres
 		$user = $this->Session->read('user');
-		if(!isset($this->params[0]) || !is_numeric($this->params[0])) {
+		if(!isset($this->Request->params[0]) || !is_numeric($this->Request->params[0])) {
 			$this->redirect(url('ticket'));
 		}
 
-		$id = $this->params[0];
+		$id = $this->Request->params[0];
 		$d['id'] = $id;
 
 		$tmp = $this->Ticket->search(array('id' => $id));
@@ -183,11 +183,11 @@ class ticketCtrl extends Ctrl {
 	}
 
 	public function close() {
-		if(!isset($this->params[0]) || !is_numeric($this->params[0])) {
+		if(!isset($this->Request->params[0]) || !is_numeric($this->Request->params[0])) {
 			$this->Session->setFlash('Numéro de ticket incorrect', 'error');
 			$this->redirect(url('ticket'));
 		} else {
-			$ticket_id = $this->params[0];
+			$ticket_id = $this->Request->params[0];
 		}
 
 		$mtp = $this->Ticket->search(array('id' => $ticket_id));

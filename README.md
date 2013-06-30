@@ -15,13 +15,15 @@ Voici une liste de ce qu'il faut encore faire :
   + Vue
   + Édition
   + Liste
-+ Gestion des utilisateurs #admin
++ Gestion des utilisateurs #admin (en cours)
   + Aperçu
   + Réinitialisation de mdp
   + Édition des droits
 + Gestion du serveur
   + Ajout de la mumble-box
 + Édition du tuto depuis l'admin #admin
++ Avatar par utilisateur #feature
++ Fonctionnalité remember-me #feature
 + Refonte du viewer #postbeta
 + Pagination des tickets #admin #postbeta
 + Suppression de compte #feature
