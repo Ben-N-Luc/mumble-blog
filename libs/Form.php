@@ -53,13 +53,10 @@ class Form {
 	public function input($name, $label, $options = array()) {
 		$html = '';
 		$error = false;
-		$infoMessage = false;
-		debug($this->controller);
+		$classError = '';
 		if (isset($this->errors[$name])) {
 			$error = $this->errors[$name];
 			$classError = ' error';
-		} else {
-			$classError = '';
 		}
 		if ($label == 'hidden') {
 			if (!isset($options['value']) && isset($this->controller->Request->post->$name)) {
