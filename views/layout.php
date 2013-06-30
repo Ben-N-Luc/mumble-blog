@@ -4,9 +4,7 @@
 		<meta charset="utf-8">
 		<script type="text/javascript" src="<?php echo url('js/libs.js') ?>"></script>
 		<script type="text/javascript" src="<?php echo url('js/main.js') ?>"></script>
-		<style type="text/css">
-			<?php echo $this->Css ?>
-		</style>
+		<?php echo $this->Css ?>
 		<title><?php echo (isset($title_for_layout)) ? $title_for_layout . ' - Mumble blog' : "Mumble blog"; ?></title>
 	</head>
 	<body>
