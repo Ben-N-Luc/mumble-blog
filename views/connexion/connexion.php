@@ -3,7 +3,7 @@
 	<?= $this->Form->startForm(url(REQUEST_URI)) ?>
 	<?= $this->Form->input('action', 'hidden', array('value' => 'signup')) ?>
 	<?= $this->Form->input('pseudo', 'Pseudo') ?>
-	<?= $this->Form->input('mail', 'Email', array('type' => 'mail')) ?>
+	<?= $this->Form->input('mail', 'Email', array('type' => 'email')) ?>
 	<?= $this->Form->input('password', 'Mot de passe', array('type' => 'password')) ?>
 	<?= $this->Form->submit("S'inscrire", array('class' => 'btn')) ?>
 	<?= $this->Form->endForm() ?>
