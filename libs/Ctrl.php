@@ -179,8 +179,8 @@ class Ctrl {
 	}
 
 	public function loadModel($model) {
+		$model = ucfirst($model);
 		if(!isset($this->$model) || $this->$model === false) {
-			$model = ucfirst($model);
 			require_once MODEL_DIR . DS . $model . '.php';
 			$this->$model = new $model(strtolower($model));
 		}
