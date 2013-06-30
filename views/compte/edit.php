@@ -14,8 +14,7 @@
 	<h3>Modifier l'email</h3>
 	<?= $this->Form->startForm() ?>
 	<?= $this->Form->input('action', 'hidden', array('value' => 'mail_edit')) ?>
-	<span class="email"><?= $email ?></span>
-	<?= $this->Form->input('mail', 'Nouvelle adresse email', array('type' => 'email')) ?>
+	<?= $this->Form->input('mail', 'Nouvelle adresse email', array('type' => 'email', 'value' => $email)) ?>
 	<?= $this->Form->submit('Modifier') ?>
 	<?= $this->Form->endForm() ?>
 </section>

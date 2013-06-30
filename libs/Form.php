@@ -15,7 +15,10 @@ class Form {
 	 * @param $method Méthode d'envoi de formulaire
 	 * @param $options Tableau d'options à appliquer au formulaire (class, ...)
 	 */
-	public function startForm($action = "#", $method = "POST", $options = array()) {
+	public function startForm($action = null, $method = "post", $options = array()) {
+		if($action === null) {
+			$action = url(REQUEST_URI);
+		}
 		$html ="<form action=\"$action\" method=\"$method\" ";
 		if (!empty($options)) {
 			foreach ($options as $attr => $val) {

@@ -29,6 +29,11 @@ class compteCtrl extends Ctrl {
 	public function delete() {
 	}
 
+	/**
+	 * Édition de mot de passe et d'email
+	 * @todo Correction du changement de mdp
+	 * @todo Changement d'email
+	 */
 	public function edit() {
 		$user = $this->Session->read('user');
 		$user = current($this->User->search(array(
@@ -41,22 +46,20 @@ class compteCtrl extends Ctrl {
 				unset($this->Request->post->action);
 				if ($user->password == sha1($this->Request->post->old_password)) {
 					if ($this->User->validates($this->Request->post) && $this->Request->post->password1 == $this->Request->post->password2) {
-						$new_user->password = $this->Request->post->password1;
+						$new_user['password'] = sha1($this->Request->post->password1);
 						$this->User->update(array('id' => $user->id), $new_user);
 						$this->Request->post = new stdClass();
 						$this->Session->setFlash('Mot de passe modifié avec succès !', 'success');
-					}
-					else {
+					} else {
+						debug($this->User->lastRequest);
 						$this->User->errors['password2'] = 'Les deux mots de passe doivent être identique';
 						$this->Session->setFlash('Erreur !', 'error');
 					}
-				}
-				else {
+				} else {
 					$this->User->errors['old_password'] = 'Le mot de passe est incorrect.';
 					$this->Session->setFlash('Erreur !', 'error');
 				}
-			}
-			else {
+			} else {
 				// Changement d'email
 			}
 		}
