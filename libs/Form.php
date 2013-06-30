@@ -92,9 +92,6 @@ class Form {
 				$fin = $this->controller->Request->post->$name . "</textarea>";
 			}
 			$html .= "id=\"$name\" name=\"$name\" ";
-			if ($infoMessage) {
-				$fin .= '<img src="' . BASE_URL . '/img/ico-info.png" alt="info" class="infoAlert"' . $infoMessage . '>';
-			}
 			foreach ($options as $attr => $val) {
 				$html .= "$attr=\"$val\" ";
 			}
