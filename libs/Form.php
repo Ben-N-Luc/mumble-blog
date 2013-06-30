@@ -5,8 +5,7 @@ class Form {
 
 	public $errors;
 
-	public function __construct($controller) 
-	{
+	public function __construct($controller) {
 		$this->controller = $controller;
 	}
 
@@ -16,8 +15,7 @@ class Form {
 	 * @param $method Méthode d'envoi de formulaire
 	 * @param $options Tableau d'options à appliquer au formulaire (class, ...)
 	 */
-	public function startForm($action = "#", $method = "POST", $options = array())
-	{
+	public function startForm($action = "#", $method = "POST", $options = array()) {
 		$html ="<form action=\"$action\" method=\"$method\" ";
 		if (!empty($options)) {
 			foreach ($options as $attr => $val) {
@@ -31,16 +29,14 @@ class Form {
 	/**
 	 * Ferme le formulaire
 	 */
-	public function endForm()
-	{
+	public function endForm() {
 		return "</form>";
 	}
 
 	/**
 	 * Crée un bouton de submit
 	 */
-	public function submit($value='send', $options = array())
-	{
+	public function submit($value='send', $options = array()) {
 		$html = "<div class=\"actions\"><input type=\"submit\" value=\"$value\"";
 		foreach ($options as $attr => $value) {
 			$html .= "$attr=\"$val\" ";
@@ -59,61 +55,51 @@ class Form {
 		$error = false;
 		$infoMessage = false;
 		debug($this->errors);
-		if (isset($this->errors[$name]))
-		{
+		if (isset($this->errors[$name])) {
 			$error = $this->errors[$name];
 			$classError = ' error';
+		} else {
+			$classError = '';
 		}
-		if ($label == 'hidden')
-		{
-			if (!isset($options['value'])) {
-				$options['value'] = $this->request->post->$name; // Récup de la valeur dans le post
+		if ($label == 'hidden') {
+			if (!isset($options['value']) && isset($this->controller->Request->post->$name)) {
+				$options['value'] = $this->controller->Request->post->$name; // Récup de la valeur dans le post
 			}
 			return '<input type="hidden" name="' . $name . '" value="' . $options['value'] . '">';
-		}
-		else
-		{
+		} else {
 			if (isset($options['info'])) {
 				$infoMessage = ' data-alert="' . $options['info'] . '"';
 				unset($options['info']);
 			}
-			if (isset($this->Request->Post->$name) && ($options['type'] != 'textarea') && ($options['type'] != 'checkbox')) 
-			{
-				$options['value'] = $this->controller->request->data->$name;
+			if (isset($this->controller->Request->post->$name) && ($options['type'] != 'textarea') && ($options['type'] != 'checkbox')) {
+				$options['value'] = $this->controller->Request->post->$name;
 			}
 			$html .= "<div class=\"row$classError\">";
 			$html .= "<label for=\"$name\">$label</label>";
 			$fin = "";
 			if (!isset($options['type'])) {
 				$html .= "<input type=\"text\" ";
-			}
-			elseif ($options['type'] == 'email') {
+			} elseif ($options['type'] == 'email') {
 				$html .= "<input type=\"email\" ";
-			}
-			elseif ($options['type'] == 'url') {
+			} elseif ($options['type'] == 'url') {
 				$html .= "<input type=\"text\" pattern=\"http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?\" ";
-			}
-			elseif ($options['type'] == 'checkbox') {
+			} elseif ($options['type'] == 'checkbox') {
 				$html .= "<input type=\"hidden\" name=\"$name\" value=\"0\"><input type=\"checkbox\" ";
-				if ($options['value'] == $this->Request->Post->$name) 
-				{
+				if ($options['value'] == $this->controller->Request->post->$name) {
 					$html .= 'checked ';
 				}
-			}
-			elseif ($options['type'] == 'password') {
+			} elseif ($options['type'] == 'password') {
 				$html .= "<input type=\"password\" ";
-			}
-			elseif ($options['type'] == 'textarea') {
+			} elseif ($options['type'] == 'textarea') {
 				$html .= "<textarea ";
-				$fin = $this->Request->Post->$name . "</textarea>";
+				$fin = $this->controller->Request->post->$name . "</textarea>";
 			}
 			$html .= "id=\"$name\" name=\"$name\" ";
 			if ($infoMessage) {
 				$fin .= '<img src="' . BASE_URL . '/img/ico-info.png" alt="info" class="infoAlert"' . $infoMessage . '>';
 			}
 			foreach ($this->inputSpec as $spec) {
-				if (isset($options[$spec]) && $options[$spec])
-				{
+				if (isset($options[$spec]) && $options[$spec]) {
 					$html .= $spec . " ";
 					unset($options[$spec]);
 				}
@@ -122,12 +108,12 @@ class Form {
 				$html .= "$attr=\"$val\" ";
 			}
 			$html .= '>' . $fin;
-			if ($error)
-			{
+			if ($error) {
 				$html .= '<span class="help-inline">' . $error . '</span>';
 			}
 			$html .= "</div>";
 		}
+
 		return $html . "\n";
 	}
 

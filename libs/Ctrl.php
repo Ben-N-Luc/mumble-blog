@@ -94,6 +94,7 @@ class Ctrl {
 		}
 
 		$this->Request = new Request($ctrl, $action, $params);
+		$this->Form = new Form($this);
 
 		// Génération du css lessPHP
 		$this->Less = new lessc;

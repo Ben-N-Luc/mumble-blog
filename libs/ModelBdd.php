@@ -13,10 +13,7 @@ class Model {
 	public $errors = array();
 
 	public function __construct() {
-		//Initialisation de variables utiles...
-		if($this->table === false) {
-			$this->table = strtolower(get_class($this)).'s';
-		}
+		$this->table = strtolower(get_class($this)).'s';
 
 		// Formatages des noms de fonctions SQL
 		foreach ($this->sqlFunctions as $k => $v) {
@@ -24,24 +21,22 @@ class Model {
 		}
 
 		// Connexion à la bdd
-		if(self::$connection) {
-			return true;
-		}
-
-		try {
-			$dbInfos = (ONLINE) ? Conf::$dbInfos['online'] : Conf::$dbInfos['local'];
-			$db = new PDO('mysql:host='.$dbInfos['host'].';dbname='.$dbInfos['dbname'].';',
-					$dbInfos['user'],
-					$dbInfos['pwd'],
-					array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
-			);
-			self::$connection = $db;
-		} catch(PDOException $e) {
-			if(Conf::$debugLvl) {
-				error($e->getMessage(), E_USER_ERROR);
-				die($e->getMessage());
-			} else {
-				die('Connexion impossible à la base de données');
+		if(!self::$connection) {
+			try {
+				$dbInfos = (ONLINE) ? Conf::$dbInfos['online'] : Conf::$dbInfos['local'];
+				$db = new PDO('mysql:host='.$dbInfos['host'].';dbname='.$dbInfos['dbname'].';',
+						$dbInfos['user'],
+						$dbInfos['pwd'],
+						array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+				);
+				self::$connection = $db;
+			} catch(PDOException $e) {
+				if(Conf::$debugLvl) {
+					error($e->getMessage(), E_USER_ERROR);
+					die($e->getMessage());
+				} else {
+					die('Connexion impossible à la base de données');
+				}
 			}
 		}
 	}
@@ -227,56 +222,37 @@ class Model {
 
 	/**
 	 * Retourne true si les données envoyées correspondent aux règles données dans le model en cours
-	 * 
 	 */
-	function validates($data) {
+	public function validates($data) {
 		$errors = array();
-		foreach ($this->validate as $k => $v)
-		{
-			if (!isset($data->$k))
-			{
+
+		foreach ($this->validate as $k => $v) {
+			if (!isset($data->$k)) {
 				$errors[$k] = $v['message'];
-			}
-			else
-			{
-				if ($v['rule'] == 'notEmpty' && empty($data->$k))
-				{
+			} else {
+				if ($v['rule'] == 'notEmpty' && empty($data->$k)) {
 					$errors[$k] = $v['message'];
 				}
-				if (isset($v['verif']))
-				{
-					if (!preg_match('/^' . $v['rule'] . '$/', $data->$k) && $v['verif'] == 'regex')
-					{
+				if (isset($v['verif'])) {
+					if (!preg_match('/^' . $v['rule'] . '$/', $data->$k) && $v['verif'] == 'regex') {
 						$errors[$k] = $v['message'];
-					}
-					elseif ($v['verif'] == 'filtre')
-					{
-						if ($v['rule'] == 'mail' && !filter_var($data->$k, FILTER_VALIDATE_EMAIL))
-						{
+					} elseif ($v['verif'] == 'filtre') {
+						if ($v['rule'] == 'mail' && !filter_var($data->$k, FILTER_VALIDATE_EMAIL)) {
 							$errors[$k] = $v['message'];
-						}
-						elseif ($v['rule'] == 'url' &&
-								!preg_match('`((?:https?|ftp)://\S+[[:alnum:]]/?)`si',$url))
-						{
+						} elseif ($v['rule'] == 'url' && !preg_match('`((?:https?|ftp)://\S+[[:alnum:]]/?)`si',$url)) {
 							$errors[$k] = $v['message'];
 						}
 					}
 				}
 			}
 		}
+
 		$this->errors = $errors;
-		if (isset($this->Helper))
-		{
+		if (isset($this->Form)) {
 			$this->Form->errors = $errors;
 		}
-		if (empty($errors))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+
+		return empty($errors);
 	}
 
 }

@@ -1,7 +1,7 @@
 <section class="middle">
 	<h2>Inscription</h2>
 	<?= $this->Form->startForm(url(REQUEST_URI)) ?>
-	<?= $this->Form->input('action', 'hidden') ?>
+	<?= $this->Form->input('action', 'hidden', array('value' => 'signup')) ?>
 	<?= $this->Form->input('pseudo', 'Pseudo') ?>
 	<?= $this->Form->input('mail', 'Email', array('type' => 'mail')) ?>
 	<?= $this->Form->input('password', 'Mot de passe', array('type' => 'password')) ?>
