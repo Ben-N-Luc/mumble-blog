@@ -14,14 +14,14 @@ class connexionCtrl extends Ctrl {
 	public function connexion() {
 
 		// Post
-		if(!empty($this->Post)) {
+		if($this->Request->posted) {
 			// Connexion
-			if(object_keys($this->Post) == $this->champs['connexion']) {
+			if(object_keys($this->Request->post) == $this->champs['connexion']) {
 				$user = current($this->User->search(
-					array('pseudo' => $this->Post->pseudo)
+					array('pseudo' => $this->Request->post->pseudo)
 				));
 				if($user) {
-					if(sha1($this->Post->mdp) == $user->password) {
+					if(sha1($this->Request->post->mdp) == $user->password) {
 						unset($user->password);
 						$this->Session->auth($user);
 						$this->Session->setFlash('Vous êtes bien connecté', 'success');
@@ -34,28 +34,28 @@ class connexionCtrl extends Ctrl {
 				}
 
 			// Inscription
-			} elseif(object_keys($this->Post) == $this->champs['inscription']) {
+			} elseif(object_keys($this->Request->post) == $this->champs['inscription']) {
 
 				// déjà un utilisateurs ?
 				$user = current($this->User->search(
-					array('pseudo' => $this->Post->username, 'mail' => $this->Post->email),
+					array('pseudo' => $this->Request->post->username, 'mail' => $this->Request->post->email),
 					array('logical_term' => 'OR')
 				));
 				if($user) {
 					$this->Session->setFlash('Pseudo ou adresse mail déjà pris', 'warning');
 				} else {
 					// email valide ?
-					if (filter_var($this->Post->email, FILTER_VALIDATE_EMAIL)) {
+					if (filter_var($this->Request->post->email, FILTER_VALIDATE_EMAIL)) {
 
 						// longueur mdp
-						if (strlen($this->Post->pwd) < 6) {
+						if (strlen($this->Request->post->pwd) < 6) {
 							$this->Session->setFlash('Votre mot de passe doit faire au moins 6 caractères');
 						} else {
 							// écriture en bdd
 							$data = array(
-								'pseudo' => $this->Post->username,
-								'password' => sha1($this->Post->pwd),
-								'mail' => $this->Post->email
+								'pseudo' => $this->Request->post->username,
+								'password' => sha1($this->Request->post->pwd),
+								'mail' => $this->Request->post->email
 							);
 							if($this->User->add($data)) {
 								$this->Session->setFlash('Vous êtes bien inscrit', "success");

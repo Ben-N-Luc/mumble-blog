@@ -86,14 +86,14 @@ class ticketCtrl extends Ctrl {
 	 */
 	public function nouveau() {
 		// test du formulaire
-		if(!empty($this->Post)) {
-			if(object_keys($this->Post) == $this->champs) {
+		if($this->Request->posted) {
+			if(object_keys($this->Request->post) == $this->champs) {
 				$user = $this->Session->read('user');
 
 				$data = array(
-					'subject' => $this->Post->subject,
-					'content' => $this->Post->msg,
-					'type'    => $this->Post->type,
+					'subject' => $this->Request->post->subject,
+					'content' => $this->Request->post->msg,
+					'type'    => $this->Request->post->type,
 					'date'    => 'NOW()',
 					'user_id' => $user->id
 				);
@@ -109,7 +109,7 @@ class ticketCtrl extends Ctrl {
 					$user->mail,
 					'Formulaire de contact Mumble',
 					'Nouveau message sur le <a href="mumble.wtgeek.be">site</a>, de la part de '.
-					$user->pseudo . ', sujet : ' . $this->Post->subject . ', type : ' . $this->Post->type
+					$user->pseudo . ', sujet : ' . $this->Request->post->subject . ', type : ' . $this->Request->post->type
 				);
 				if($mail->send()) {
 					$this->Session->setFlash('Votre message à bien été envoyé', 'success');
@@ -145,10 +145,10 @@ class ticketCtrl extends Ctrl {
 			$this->redirect(url());
 		}
 
-		if($this->Posted) {
-			if(isset($this->Post->content)) {
+		if($this->Request->posted) {
+			if(isset($this->Request->post->content)) {
 				$r = $this->Answer->add(array(
-					'content' => $this->Post->content,
+					'content' => $this->Request->post->content,
 					'date' => 'NOW()',
 					'user_id' => $user->id,
 					'ticket_id' => $d['tickets']['master']->id
