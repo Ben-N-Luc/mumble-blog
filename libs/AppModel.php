@@ -16,8 +16,8 @@ class AppModel {
 		$this->table = strtolower(get_class($this)).'s';
 
 		// Formatages des noms de fonctions SQL
-		foreach ($this->sqlFunctions as $k => $v) {
-			$this->sqlFunctions[$k] = strtoupper($v) . '()';
+		foreach ($this->_sqlFunctions as $k => $v) {
+			$this->_sqlFunctions[$k] = strtoupper($v) . '()';
 		}
 
 		// Connexion à la bdd
