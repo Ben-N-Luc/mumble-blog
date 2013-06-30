@@ -3,7 +3,7 @@
 class Conf {
 
 	/**
-	 * Select if you wanna use database or cvs to store data
+	 * Don't change that !
 	 */
 	static $db = true;
 
