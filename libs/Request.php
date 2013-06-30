@@ -4,6 +4,7 @@ class Request {
 
 	public $get;
 	public $post;
+	public $posted = false;
 
 	public function __construct($ctrl, $action, $params) {
 		// Stockage des informations de la classe
