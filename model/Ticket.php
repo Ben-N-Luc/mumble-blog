@@ -30,6 +30,25 @@ class Ticket extends Model {
 			INNER JOIN users ON users.id = tickets.user_id
 			' . $cond . '
 			GROUP BY tickets.id
+			UNION
+				SELECT
+					tickets.id,
+					tickets.subject,
+					tickets.content,
+					tickets.type,
+					tickets.closed,
+					tickets.date,
+					answers.date AS last_answer,
+					COUNT(answers.id) AS answers,
+					users.id AS user_id,
+					users.pseudo,
+					users.mail,
+					users.rank
+				FROM tickets
+				LEFT JOIN answers ON answers.ticket_id = tickets.id
+				INNER JOIN users ON users.id = tickets.user_id
+				' . $cond . '
+				GROUP BY tickets.id
 			ORDER BY closed ASC, date DESC';
 
 		return $this->sql($sql)->fetchAll(PDO::FETCH_OBJ);
