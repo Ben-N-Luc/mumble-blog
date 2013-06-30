@@ -2,7 +2,7 @@
 
 class Form {
 
-
+	public $controller;
 	public $errors;
 
 	public function __construct($controller) {
@@ -38,7 +38,7 @@ class Form {
 	 */
 	public function submit($value='send', $options = array()) {
 		$html = "<div class=\"actions\"><input type=\"submit\" value=\"$value\"";
-		foreach ($options as $attr => $value) {
+		foreach ($options as $attr => $val) {
 			$html .= "$attr=\"$val\" ";
 		}
 		return $html . '></div>';
@@ -54,7 +54,6 @@ class Form {
 		$html = '';
 		$error = false;
 		$infoMessage = false;
-		debug($this->errors);
 		if (isset($this->errors[$name])) {
 			$error = $this->errors[$name];
 			$classError = ' error';
@@ -67,17 +66,17 @@ class Form {
 			}
 			return '<input type="hidden" name="' . $name . '" value="' . $options['value'] . '">';
 		} else {
-			if (isset($options['info'])) {
-				$infoMessage = ' data-alert="' . $options['info'] . '"';
-				unset($options['info']);
+			if (!isset($options['type']))
+			{
+				$options['type'] = 'text';
 			}
-			if (isset($this->controller->Request->post->$name) && ($options['type'] != 'textarea') && ($options['type'] != 'checkbox')) {
+			if (isset($this->controller->Request->post->$name) && $options['type'] != 'textarea' && $options['type'] != 'checkbox') {
 				$options['value'] = $this->controller->Request->post->$name;
 			}
 			$html .= "<div class=\"row$classError\">";
 			$html .= "<label for=\"$name\">$label</label>";
 			$fin = "";
-			if (!isset($options['type'])) {
+			if ($options['type'] == 'text') {
 				$html .= "<input type=\"text\" ";
 			} elseif ($options['type'] == 'email') {
 				$html .= "<input type=\"email\" ";
@@ -97,12 +96,6 @@ class Form {
 			$html .= "id=\"$name\" name=\"$name\" ";
 			if ($infoMessage) {
 				$fin .= '<img src="' . BASE_URL . '/img/ico-info.png" alt="info" class="infoAlert"' . $infoMessage . '>';
-			}
-			foreach ($this->inputSpec as $spec) {
-				if (isset($options[$spec]) && $options[$spec]) {
-					$html .= $spec . " ";
-					unset($options[$spec]);
-				}
 			}
 			foreach ($options as $attr => $val) {
 				$html .= "$attr=\"$val\" ";
