@@ -52,7 +52,7 @@ function isAssociative($array) {
 }
 
 /**
- * Renvoie la cahine de caractère sans les accents
+ * Renvoie la chaine de caractère sans les accents
  * @param type string $str Chaine de caract&egrave;re où supprimer les accents
  * @param type string $charset Encodage (d&eacute;faut = 'utf-8')
  * @return type string Chaine sans les caract&egrave;res accentu&eacute;s.

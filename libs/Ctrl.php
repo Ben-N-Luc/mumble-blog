@@ -8,56 +8,60 @@ class Ctrl {
 	);
 
 	/**
-	 * Contain the session object
+	 * Contiendra l'objet de session
 	 */
 	public $Session;
 
 	/**
-	 * contain $_GET content as object
+	 * Contiendra la variable $_GET en tant qu'objet (échappée)
 	 */
 	public $Get;
 
 	/**
-	 * contain $_POST content as object
+	 * Contiendra la variable $_POST en tant qu'objet (échappée)
 	 */
 	public $Post;
 
 	/**
-	 * Contain true if a post has been detected
+	 * Contiendra true si un post a été effectué
 	 */
 	public $Posted = false;
 
 	/**
-	 * Models loaded in every Ctrl
+	 * Modèles à charger dans tous les controllers
 	 */
 	public $DefaultModels = array('Config');
 
 	/**
-	 * Contain files needed for specifics controllers such as 'Models' wich are all the Models needed
+	 * Liste des objets utilisé par le controller
+	 * (par exemple les modèles a charger pour chaque action du controller)
 	 */
 	public $uses = array(
 		'Models' => array()
 	);
 
 	/**
-	 * Contain data to pass from Ctrl to View
+	 * Données à passer du controller à la vue
 	 */
 	public $data = array();
 
 	/**
-	 * Contain categories allowed to view the page
-	 * Could be : 'all', 'admin', 'connected'
+	 * Rang des personnes autorisées à voir le contenu :
+	 * all       : Tout le monde
+	 * connected : Utilisateurs connectés
+	 * admin     : Les administrateurs
 	 */
 	public $allowed = 'all';
 
 	/**
-	 * Url to redirect user which has to connect
-	 * It has to be public !
+	 * Url vers laquelle les utilisateurs sont redirigé en cas
+	 * d'erreur d'authentification.
+	 * Elle doit évidemment être accessible pour tous...
 	 */
 	public $connectionUrl = 'connexion';
 
 	/**
-	 * Default layout file, overwrite it to use custom layout
+	 * Layout par défaut
 	 */
 	public $Layout = 'layout';
 
@@ -146,7 +150,7 @@ class Ctrl {
 		}
 
 		/**
-		 * Loading view
+		 * Chargement de la vue
 		 */
 		ob_start();
 		if(is_file(VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php')) {
@@ -158,30 +162,24 @@ class Ctrl {
 			$msg = 'View not found (' . VIEWS_DIR . DS . $this->ctrl . DS . $this->action . '.php)';
 			require VIEWS_DIR . DS . 'e404' . DS . 'e404.php';
 		}
-		/* getting view */
 		$content_for_layout = ob_get_clean();
 
-		/**
-		 * Loading layout
-		 */
+		// Chargement du layout
 		if(is_file(VIEWS_DIR . DS . $this->Layout . '.php')) {
 			require VIEWS_DIR . DS . $this->Layout . '.php';
 		} else {
 			$this->error($this->Layout . '.php do not exist in ' . VIEWS_DIR . DS . $this->Layout . '.php', E_USER_ERROR);
 		}
-
 	}
 
 	public function loadModels($models) {
 		foreach ($models as $model) {
-			if(!isset($this->$model) || $this->$model !== false) {
-				$this->loadModel($model);
-			}
+			$this->loadModel($model);
 		}
 	}
 
 	public function loadModel($model) {
-		if(!isset($this->$model) || $this->$model !== false) {
+		if(!isset($this->$model) || $this->$model === false) {
 			$model = ucfirst($model);
 			require_once MODEL_DIR . DS . $model . '.php';
 			$this->$model = new $model(strtolower($model));
@@ -220,12 +218,11 @@ class Ctrl {
 	}
 
 	/**
-	 * Trigger an error and log it
+	 * Trigger an error
 	 * @param str $text Error description
 	 * @param int/str $lvl Type d'erreur (E_USER_NOTICE, E_USER_WARNING, E_USER_ERROR, user-defined type...)
 	 */
 	public function error($text, $lvl = E_USER_NOTICE) {
-
 		switch ($lvl) {
 			case E_USER_ERROR:
 				$levelText = 'Error';
@@ -311,6 +308,7 @@ class Ctrl {
 		}
 		$html .= '</ul>' . "\n";
 		$html .= '<div class="clearfix"></nav>';
+
 		echo $html;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Const definitions
+ * Définition des constantes
  */
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', substr(dirname(__FILE__), 0, strpos(dirname(__FILE__), 'webroot')));
@@ -16,13 +16,13 @@ define('MODEL_DIR', ROOT . 'model');
 define('LESS_DIR', ROOT . 'less');
 define('ONLINE', (DS == '/'));
 
-// Libs inclusion
+// Inclusion des librairies
 include LIBS_DIR . DS . 'Includes.php';
 
-// Custom Error handler
+// Error handler personnalisé (parce que c'est fun ^^)
 set_error_handler('error_handler');
 
-// Redirecting empty request to index
+// Redirection des requêtes vides vers l'index
 $script_name = (REQUEST_URI == '') ? 'index' : REQUEST_URI;
 
 if(stripos($script_name, '/') !== false) {
@@ -34,18 +34,14 @@ if(stripos($script_name, '/') !== false) {
 	$params = array();
 }
 
-/**
- * If there's a controller in the ctrl directory
- * which correspond to the requested url
- */
+// Si le controller demandé existe (sinon 404)
 if(is_file(CTRL_DIR . DS . $script_name . 'Ctrl.php')) {
 	require CTRL_DIR . DS . $script_name . 'Ctrl.php';
 	$controllerName = $script_name . 'Ctrl';
 	$ctrl = new $controllerName($script_name, $action, $params);
 } else {
-	/* if the 404 page do not exist ! */
 	header("HTTP/1.0 404 Not Found");
-	//error('404 Error controller not found !!!', E_USER_ERROR);
+	// Ce serait sympa de vérifier si le ctrl 404 existe aussi
 	require CTRL_DIR . DS . 'e404Ctrl.php';
 	$ctrl = new e404Ctrl('e404', 'e404', array('Ctrl not found (' . CTRL_DIR . DS . $script_name . 'Ctrl.php' . ')'));
 }
