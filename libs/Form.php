@@ -5,7 +5,7 @@ class Form {
 	public $controller;
 	public $errors;
 
-	public function __construct($controller) {
+	public function __construct(&$controller) {
 		$this->controller = $controller;
 	}
 
@@ -54,6 +54,7 @@ class Form {
 		$html = '';
 		$error = false;
 		$infoMessage = false;
+		debug($this->controller);
 		if (isset($this->errors[$name])) {
 			$error = $this->errors[$name];
 			$classError = ' error';

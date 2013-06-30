@@ -31,9 +31,6 @@ class Model extends AppModel {
 			}
 		}
 		$this->errors = $errors;
-		if (isset($this->Form)) {
-			$this->Form->errors = $errors;
-		}
 
 		return empty($errors);
 	}
