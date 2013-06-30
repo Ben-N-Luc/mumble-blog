@@ -8,18 +8,7 @@ class adminCtrl extends Ctrl {
 	public $allowed = 'admin';
 
 	public function admin() {
-		$d['tickets'] = $this->Ticket->search(array(
-				'closed' => 0,
-				'master IS NULL'
-			),
-			array(
-				//'limit' => '16',
-				'order' => array(
-					'field' => 'date',
-					'order' => 'desc'
-				)
-			)
-		);
+		$d['tickets'] = $this->Ticket->liste();
 
 		$d['users'] = $this->User->search(array(), array(
 			'limit' => 6,
