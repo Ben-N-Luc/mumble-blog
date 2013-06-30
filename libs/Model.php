@@ -18,7 +18,7 @@ class Model extends AppModel {
 					$errors[$k] = $v['message'];
 				}
 				if (isset($v['verif'])) {
-					if (!preg_match('/^' . $v['rule'] . '$/', $data->$k) && $v['verif'] == 'regex') {
+					if ($v['verif'] == 'regex'! && preg_match('/^' . $v['rule'] . '$/', $data->$k)) {
 						$errors[$k] = $v['message'];
 					} elseif ($v['verif'] == 'filtre') {
 						if ($v['rule'] == 'mail' && !filter_var($data->$k, FILTER_VALIDATE_EMAIL)) {
