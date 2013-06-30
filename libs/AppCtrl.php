@@ -50,7 +50,7 @@ class AppCtrl {
 		'style.less'
 	);
 	public $Less;
-	protected $_Css
+	protected $_Css;
 
 	/**
 	 * Récupération des variables $_POST et $_GET,
