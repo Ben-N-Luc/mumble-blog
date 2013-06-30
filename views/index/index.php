@@ -1,5 +1,5 @@
 <section class="middle">
-	<h3>Dernières news</h3>
+	<h2>Dernières news</h2>
 	<?php if (empty($posts)): ?>
 		<article>
 			Pas de news pour le moment...
@@ -21,18 +21,16 @@
 	<?php endforeach ?>
 </section>
 <section class="middle">
-	<h3>Liens utiles</h3>
-
+	<h2>Liens utiles</h2>
 	<article>
-		<h4>Lorem</h4>
-		<p>
-			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-			consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-			cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-			proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		</p>
+		<h3>Lorem</h3>
+		<ul class="link-list">
+			<li><a href="">Télécharger Mumble</a></li>
+			<li><a href="">Aider mumble à se développer</a></li>
+			<li><a href="">Lien 3</a></li>
+			<li><a href="">Lien 4</a></li>
+			<li><a href="">Lien 5</a></li>
+		</ul>
 	</article>
 </section>
 <div class="clearfix"></div>
