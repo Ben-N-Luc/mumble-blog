@@ -72,14 +72,13 @@ class Conf {
 			)
 		),
 		'admin' => array(
-			'admin'            => 'Accueil',
 			'ticket'           => 'Tickets',
 			'admin/posts-list' => 'Posts',
 			'admin/tuto'       => 'Tuto',
 			'admin/users-list' => 'Users',
 			'admin/mumble'     => 'Le serveur',
 			''                 => 'Le site',
-			'left'    => array(
+			'left'             => array(
 				'compte'             => 'Mon compte',
 				'admin'              => 'Administration',
 				'compte/deconnexion' => 'Déconnexion'
