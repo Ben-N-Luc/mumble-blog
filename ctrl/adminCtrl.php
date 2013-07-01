@@ -22,6 +22,7 @@ class adminCtrl extends Ctrl {
 			if(strlen($d['tickets'][$k]->content) > 400) {
 				$d['tickets'][$k]->content = substr($v->content, 0, 400) . '...';
 			}
+			$d['tickets'][$k]->last_answer = date(Conf::$dateFormat, strtotime($v->last_answer));
 		}
 
 		$d['rank_translation'] = array(
