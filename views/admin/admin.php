@@ -1,5 +1,8 @@
 <section class="middle tickets">
 	<h2>Tickets récents</h2>
+	<?php if (empty($tickets)): ?>
+		<div class="alert alert-success">Bravo ! Pas de ticket à traiter...</div>
+	<?php endif ?>
 	<?php foreach($tickets as $ticket): ?>
 		<article>
 			<h3>
