@@ -37,6 +37,15 @@ class AppModel {
 				}
 			}
 		}
+
+		$this->afterConstruct();
+		$this->_afterConstruct();
+	}
+
+	protected function _afterConstruct() {
+	}
+
+	public function afterConstruct() {
 	}
 
 	/**

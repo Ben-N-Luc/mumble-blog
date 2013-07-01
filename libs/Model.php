@@ -1,6 +1,7 @@
 <?php
 
 class Model extends AppModel {
+
 	public $validate = array();
 	public $errors = array();
 
@@ -12,7 +13,7 @@ class Model extends AppModel {
 
 		foreach ($this->validate as $k => $v) {
 			if (!isset($data->$k)) {
-				$errors[$k] = $v['message'];
+				// $errors[$k] = $v['message'];
 			} else {
 				if ($v['rule'] == 'notEmpty' && empty($data->$k)) {
 					$errors[$k] = $v['message'];
