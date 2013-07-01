@@ -1,6 +1,6 @@
 <section class="middle">
 	<h2>Inscription</h2>
-	<?= $this->Form->startForm(url(REQUEST_URI)) ?>
+	<?= $this->Form->startForm(null) ?>
 	<?= $this->Form->input('action', 'hidden', array('value' => 'signup')) ?>
 	<?= $this->Form->input('pseudo', 'Pseudo') ?>
 	<?= $this->Form->input('mail', 'Email', array('type' => 'email')) ?>
@@ -11,7 +11,7 @@
 
 <section class="middle">
 	<h2>Connexion</h2>
-	<?= $this->Form->startForm(url(REQUEST_URI)) ?>
+	<?= $this->Form->startForm(null, array('alignment' => 'right')) ?>
 	<?= $this->Form->input('action', 'hidden', array('value' => 'signin')) ?>
 	<?= $this->Form->input('log_pseudo', 'Pseudo') ?>
 	<?= $this->Form->input('log_password', 'Mot de passe', array('type' => 'password')) ?>

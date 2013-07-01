@@ -4,6 +4,7 @@ class Form {
 
 	public $controller;
 	public $errors;
+	public $alignment = 'left';
 
 	public function __construct(&$controller) {
 		$this->controller = $controller;
@@ -15,17 +16,24 @@ class Form {
 	 * @param $method Méthode d'envoi de formulaire
 	 * @param $options Tableau d'options à appliquer au formulaire (class, ...)
 	 */
-	public function startForm($action = null, $method = "post", $options = array()) {
+	public function startForm($action = null, $options = array()) {
 		if($action === null) {
 			$action = url(REQUEST_URI);
 		}
-		$html ="<form action=\"$action\" method=\"$method\" ";
+		if(!isset($options['method'])) {
+			$options['method'] = 'post';
+		}
+		if(isset($options['alignment'])) {
+			$this->alignment = $options['alignment'];
+		}
+		$html ="<form action=\"$action\" ";
 		if (!empty($options)) {
 			foreach ($options as $attr => $val) {
 				$html .= "$attr=\"$val\" ";
 			}
 		}
 		$html .= ">";
+
 		return $html;
 	}
 
@@ -77,6 +85,9 @@ class Form {
 			$html .= "<div class=\"row$classError\">";
 			$html .= "<label for=\"$name\">$label</label>";
 			$fin = "";
+			if ($error && $this->alignment == 'right') {
+				$html .= '<span class="help-inline">' . $error . '</span>';
+			}
 			if ($options['type'] == 'text') {
 				$html .= "<input type=\"text\" ";
 			} elseif ($options['type'] == 'email') {
@@ -99,7 +110,7 @@ class Form {
 				$html .= "$attr=\"$val\" ";
 			}
 			$html .= '>' . $fin;
-			if ($error) {
+			if ($error && $this->alignment == 'left') {
 				$html .= '<span class="help-inline">' . $error . '</span>';
 			}
 			$html .= "</div>";
