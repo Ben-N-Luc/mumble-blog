@@ -30,7 +30,7 @@
 	<h2>Derniers inscrits</h2>
 	<?php foreach($users as $user): ?>
 		<article>
-			<h3><a href="<?= url('admin/users-view/' . $user->id) ?>"><?= $user->pseudo ?></a></h3>
+			<h3><a href="<?= url('admin/users-edit/' . $user->id) ?>"><?= $user->pseudo ?></a></h3>
 			<div class="msg">
 				<ul>
 					<li>id : <?= $user->id ?></li>

@@ -57,6 +57,15 @@ class adminCtrl extends Ctrl {
 	public function users_list() {
 	}
 
+	public function users_edit() {
+		if(!isset($this->Request->params[0]) || !is_numeric($this->Request->params[0])) {
+			$this->redirect(url('admin/users-list'));
+		}
+		$d['user'] = current($this->User->search(array('id' => $this->Request->params[0])));
+
+		$this->set($d);
+	}
+
 	public function mumble() {
 	}
 
