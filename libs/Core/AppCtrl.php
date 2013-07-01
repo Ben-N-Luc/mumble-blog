@@ -79,7 +79,7 @@ class AppCtrl {
 		}
 
 		$this->Request = new Request($ctrl, $action, $params);
-		//$this->Form = new Form($this);
+		$this->Form = new Form($this);
 
 		// Génération du css lessPHP
 		$this->Less = new lessc;
