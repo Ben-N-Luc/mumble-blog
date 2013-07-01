@@ -216,6 +216,63 @@ class AppModel {
 	}
 
 	/**
+	 * Retourne le résultat d'une jointure interne entre 2+ tables
+	 * @param  array/object $modelToJoin Modèle de la table à joindre ou tableau de modèles à joindre
+	 * @param  array/string $cond Condition de la requête (même chose que la méthode search)
+	 * @param  array $params Paramètres de la requête (même chose que la méthode search)
+	 * @return object/boolean Résultat de la requête ou false
+	 */
+	public function innerJoin($modelToJoin, $cond = array(), array $params = array()) {
+		$sql = 'SELECT ';
+		if(isset($param['champs'])) {
+			$sql .= implode(', ', $param['champs']);
+		} else {
+			$sql .= '*';
+		}
+
+		$sql .= ' FROM ' . $this->table;
+
+		if(!is_array($modelToJoin)) {
+			$modelToJoin = array($modelToJoin);
+		}
+		foreach ($modelToJoin as $v) {
+			$sql .= ' INNER JOIN ' . $v->table;
+			$sql .= ' ON(' . $this->table . '.' . substr($v->table, 0, strlen($v->table) - 1) . '_' . $this->primaryKey . '=' . $v->table . '.' . $v->primaryKey . ')';
+		}
+
+		if(!empty($cond)) {
+			$sql .= ' WHERE ';
+			$c = array();
+			foreach ($cond as $k => $v) {
+				if(!is_numeric($v)) {
+					$v = $this->_quote($v);
+				}
+				$c[] = $k . '=' . $v;
+			}
+			$glue = (isset($param['logical_term'])) ? ' ' . $param['logical_term'] . ' ' : ' AND ';
+			$sql .= implode($glue, $c);
+		}
+
+		if(isset($param['order'])) {
+			if(is_array($param['order'])) {
+				$sql .= " ORDER BY " . $param['order']['field'] . ' ' . strtoupper($param['order']['order']);
+			} else {
+				$sql .= " ORDER BY " . strtoupper($param['order']);
+			}
+		}
+
+		if(isset($param['limit'])) {
+			$sql .= ' LIMIT ' . $param['limit'];
+		}
+
+		$pre = $this->_prepare($sql);
+		$pre->execute();
+		$this->lastRequest = $pre->queryString;
+
+		return $pre->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	/**
 	 * Permet d'envoyer une requêtes sql préformatée
 	 * @param string $sql Requête SQL
 	 */
