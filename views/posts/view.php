@@ -4,5 +4,10 @@
 		<div class="msg">
 			<?= $post->content ?>
 		</div>
+		<div class="infos">
+			<ul>
+				<li>Rédigé par : <?= $post->pseudo ?></li>
+			</ul>
+		</div>
 	</article>
 </section>

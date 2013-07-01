@@ -12,7 +12,7 @@
 				<small><?= date('d-m-Y H:i', strtotime($post->date)) ?></small>
 			</h3>
 			<p>
-				<?= substr($post->content, 0, 500) ?>...
+				<?= substr(strip_tags($post->content, '<a>'), 0, 500) ?>...
 			</p>
 			<div class="actions">
 				<a href="<?= url('posts/view/' . $post->id) ?>" class="more">Voir plus...</a>

@@ -22,12 +22,14 @@ class postsCtrl extends Ctrl {
 	}
 
 	public function view() {
+		$this->loadModel('User');
+
 		if(!isset($this->Request->params[0]) || !is_numeric($this->Request->params[0])) {
 			$this->redirect(url('posts'));
 		}
 
-		$tmp = $this->Post->search(array(
-			'id' => $this->Request->params[0]
+		$tmp = $this->Post->innerJoin($this->User, array(
+			'posts.id' => $this->Request->params[0]
 		));
 		$d['post'] = $tmp[0];
 
