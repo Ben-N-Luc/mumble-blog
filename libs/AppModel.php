@@ -1,47 +1,51 @@
 <?php
 
-class Model {
+class AppModel {
 
 	static $connection = false;
 	public $primaryKey = 'id';
 	public $table = false;
 	public $lastRequest = false;
-	public $sqlFunctions = array(
+	protected $_sqlFunctions = array(
 		'now'
 	);
 
 	public function __construct() {
-		//Initialisation de variables utiles...
-		if($this->table === false) {
-			$this->table = strtolower(get_class($this)).'s';
-		}
+		$this->table = strtolower(get_class($this)).'s';
 
 		// Formatages des noms de fonctions SQL
-		foreach ($this->sqlFunctions as $k => $v) {
-			$this->sqlFunctions[$k] = strtoupper($v) . '()';
+		foreach ($this->_sqlFunctions as $k => $v) {
+			$this->_sqlFunctions[$k] = strtoupper($v) . '()';
 		}
 
 		// Connexion à la bdd
-		if(self::$connection) {
-			return true;
-		}
-
-		try {
-			$dbInfos = (ONLINE) ? Conf::$dbInfos['online'] : Conf::$dbInfos['local'];
-			$db = new PDO('mysql:host='.$dbInfos['host'].';dbname='.$dbInfos['dbname'].';',
-					$dbInfos['user'],
-					$dbInfos['pwd'],
-					array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
-			);
-			self::$connection = $db;
-		} catch(PDOException $e) {
-			if(Conf::$debugLvl) {
-				error($e->getMessage(), E_USER_ERROR);
-				die($e->getMessage());
-			} else {
-				die('Connexion impossible à la base de données');
+		if(!self::$connection) {
+			try {
+				$dbInfos = (ONLINE) ? Conf::$dbInfos['online'] : Conf::$dbInfos['local'];
+				$db = new PDO('mysql:host='.$dbInfos['host'].';dbname='.$dbInfos['dbname'].';',
+						$dbInfos['user'],
+						$dbInfos['pwd'],
+						array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')
+				);
+				self::$connection = $db;
+			} catch(PDOException $e) {
+				if(Conf::$debugLvl) {
+					error($e->getMessage(), E_USER_ERROR);
+					die($e->getMessage());
+				} else {
+					die('Connexion impossible à la base de données');
+				}
 			}
 		}
+
+		$this->afterConstruct();
+		$this->_afterConstruct();
+	}
+
+	protected function _afterConstruct() {
+	}
+
+	public function afterConstruct() {
 	}
 
 	/**
@@ -51,7 +55,7 @@ class Model {
 	 */
 	protected function _quote($value) {
 		// Les fonctions SQL ne doivent pas être échapées
-		if(in_array($value, $this->sqlFunctions)) {
+		if(in_array($value, $this->_sqlFunctions)) {
 			return $value;
 		}
 

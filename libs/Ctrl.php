@@ -72,4 +72,8 @@ class Ctrl extends AppCtrl {
 
 		return $viewer->get();
 	}
+
+	public function css() {
+		echo $this->_Css;
+	}
 }
