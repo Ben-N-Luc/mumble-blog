@@ -19,12 +19,9 @@ class connexionCtrl extends Ctrl {
 
 				if($user) {
 					$this->Form->errors['pseudo'] = 'Pseudo déjà utilisé';
-				}
-				if($mail) {
+				} elseif($mail) {
 					$this->Form->errors['mail'] = 'Mail déjà utilisé';
-				}
-
-				if ($this->User->validates($this->Request->post)) {
+				} elseif ($this->User->validates($this->Request->post)) {
 					$this->Request->post->password = sha1($this->Request->post->password);
 					unset($this->Request->post->action);
 					$this->User->add($this->Request->post);
