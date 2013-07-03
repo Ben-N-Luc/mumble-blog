@@ -190,12 +190,11 @@ class ticketCtrl extends Ctrl {
 			$ticket_id = $this->Request->params[0];
 		}
 
-		$mtp = $this->Ticket->search(array('id' => $ticket_id));
-		$master = $tmp[0];
+		$master = current($this->Ticket->search(array('id' => $ticket_id)));
 
 		$user = $this->Session->read('user');
 		if($user->rank == 'a' || $master->id == $user->id) {
-			if($master->closed == '1') {
+			if($master->closed) {
 				$this->Ticket->open($ticket_id);
 				$this->Session->setFlash('Ticket rouvert', 'success');
 			} else {
