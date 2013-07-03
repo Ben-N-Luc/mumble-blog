@@ -1,20 +1,20 @@
 <section class="middle">
 	<h2>Inscription</h2>
-	<?= $this->Form->startForm(null) ?>
-	<?= $this->Form->input('action', 'hidden', array('value' => 'signup')) ?>
-	<?= $this->Form->input('pseudo', 'Pseudo') ?>
-	<?= $this->Form->input('mail', 'Email', array('type' => 'email')) ?>
-	<?= $this->Form->input('password', 'Mot de passe', array('type' => 'password')) ?>
-	<?= $this->Form->submit("S'inscrire", array('class' => 'btn')) ?>
-	<?= $this->Form->endForm() ?>
+	<?= $this->Form->start() ?>
+	<?= $this->Form->input('action', array('value' => 'signup', 'type' => 'hidden')) ?>
+	<?= $this->Form->input('pseudo', array('label' => 'Pseudo')) ?>
+	<?= $this->Form->input('mail', array('type' => 'email', 'label' => 'Email')) ?>
+	<?= $this->Form->input('password', array('type' => 'password', 'label' => 'Mot de passe')) ?>
+	<?= $this->Form->submit("S'inscrire") ?>
+	<?= $this->Form->end() ?>
 </section>
 
 <section class="middle">
 	<h2>Connexion</h2>
-	<?= $this->Form->startForm(null, array('alignment' => 'right')) ?>
-	<?= $this->Form->input('action', 'hidden', array('value' => 'signin')) ?>
-	<?= $this->Form->input('log_pseudo', 'Pseudo') ?>
-	<?= $this->Form->input('log_password', 'Mot de passe', array('type' => 'password')) ?>
-	<?= $this->Form->submit("Connexion", array('class' => 'btn')) ?>
-	<?= $this->Form->endForm() ?>
+	<?= $this->Form->start(null, array('alignment' => 'right')) ?>
+	<?= $this->Form->input('action', array('value' => 'signin', 'type' => 'hidden')) ?>
+	<?= $this->Form->input('log_pseudo', array('label' => 'Pseudo')) ?>
+	<?= $this->Form->input('log_password', array('type' => 'password', 'label' => 'Mot de passe')) ?>
+	<?= $this->Form->submit("Connexion") ?>
+	<?= $this->Form->end() ?>
 </section>

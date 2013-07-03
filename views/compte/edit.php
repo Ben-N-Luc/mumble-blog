@@ -2,19 +2,19 @@
 
 <section class="middle">
 	<h3>Modifier le mot de passe</h3>
-	<?= $this->Form->startForm(null) ?>
-	<?= $this->Form->input('action', 'hidden', array('value' => 'pass_edit')) ?>
-	<?= $this->Form->input('old_password', 'Ancien mot de passe', array('type' => 'password')) ?>
-	<?= $this->Form->input('password1', 'Nouveau mot de passe', array('type' => 'password')) ?>
-	<?= $this->Form->input('password2', 'Confirmation', array('type' => 'password')) ?>
-	<?= $this->Form->submit('Modifier') ?>
-	<?= $this->Form->endForm() ?>
+	<?= $this->Form->start() ?>
+		<?= $this->Form->input('action', array('value' => 'pass_edit', 'type' => 'hidden')) ?>
+		<?= $this->Form->input('old_password', array('type' => 'password', 'label' => 'Ancien mot de passe')) ?>
+		<?= $this->Form->input('password1', array('type' => 'password', 'label' => 'Nouveau mot de passe')) ?>
+		<?= $this->Form->input('password2', array('type' => 'password', 'label' =>'Confirmation')) ?>
+		<?= $this->Form->submit('Modifier') ?>
+	<?= $this->Form->end() ?>
 </section>
 <section class="middle">
 	<h3>Modifier l'email</h3>
-	<?= $this->Form->startForm(null, array('alignment' => 'right')) ?>
-	<?= $this->Form->input('action', 'hidden', array('value' => 'mail_edit')) ?>
-	<?= $this->Form->input('mail', 'Nouvelle adresse email', array('type' => 'email', 'value' => $email)) ?>
-	<?= $this->Form->submit('Modifier') ?>
-	<?= $this->Form->endForm() ?>
+	<?= $this->Form->start(null, array('alignment' => 'right')) ?>
+		<?= $this->Form->input('action', array('value' => 'mail_edit', 'type' => 'hidden')) ?>
+		<?= $this->Form->input('mail', array('type' => 'email', 'value' => $email, 'label' => 'Nouvelle adresse email')) ?>
+		<?= $this->Form->submit('Modifier') ?>
+	<?= $this->Form->end() ?>
 </section>
