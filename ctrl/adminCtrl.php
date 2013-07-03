@@ -67,7 +67,7 @@ class adminCtrl extends Ctrl {
 		if($this->Request->posted) {
 			if($this->User->validates($this->Request->post)) {
 				$new_user['rank'] = $this->Request->post->rank;
-				$new_user['email'] = $this->Request->post->mail;
+				$new_user['mail'] = $this->Request->post->mail;
 				$this->User->update(array('id' => $id), $new_user);
 				$this->Session->setFlash('Utilisateur mis à jour', 'success');
 				$this->Request->reset('post');
