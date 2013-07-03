@@ -15,7 +15,7 @@
 			<ul>
 				<li>
 					Utilisateur :
-					<a href="<?= url('ticket/ticket/' . $tickets['master']->id) ?>"><?= $tickets['master']->pseudo ?></a>
+					<a href="<?= url('ticket/ticket/' . $tickets['master']->user_id) ?>"><?= $tickets['master']->pseudo ?></a>
 				</li>
 				<li><?= $this->badge($tickets['master']->type) ?></li>
 				<li>Date : <?= $tickets['master']->date ?></li>
