@@ -136,7 +136,7 @@ class ticketCtrl extends Ctrl {
 		$id = $this->Request->params[0];
 		$d['id'] = $id;
 
-		$tmp = $this->Ticket->search(array('id' => $id));
+		$tmp = $this->Ticket->innerJoin($this->User, array('tickets.id' => $id));
 		$d['tickets']['master'] = $tmp[0];
 
 		// Seul les admins peuvent accéder aux tickets des autres
