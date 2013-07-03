@@ -9,18 +9,9 @@ class compteCtrl extends Ctrl {
 
 	public function compte() {
 		$user = $this->Session->read('user');
-		$tickets = $this->Ticket->search(array(
-				'user_id' => $user->id,
-				'closed' => 0
-			),
-			array(
-				'limit' => '4',
-				'order' => array(
-					'field' => 'date',
-					'order' => 'desc'
-				)
-			)
-		);
+		$tickets = $this->Ticket->liste(array('tickets.user_id' => $user->id));
+
+		var_dump($this->Ticket->lastRequest);
 
 		$this->set('tickets', $tickets);
 		$this->set('user', $user);
