@@ -11,8 +11,6 @@ class compteCtrl extends Ctrl {
 		$user = $this->Session->read('user');
 		$tickets = $this->Ticket->liste(array('tickets.user_id' => $user->id));
 
-		var_dump($this->Ticket->lastRequest);
-
 		$this->set('tickets', $tickets);
 		$this->set('user', $user);
 	}
