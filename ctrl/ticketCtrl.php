@@ -92,7 +92,7 @@ class ticketCtrl extends Ctrl {
 
 				$data = array(
 					'subject' => $this->Request->post->subject,
-					'content' => $this->Request->post->msg,
+					'content' => nl2p($this->Request->post->msg),
 					'type'    => $this->Request->post->type,
 					'date'    => 'NOW()',
 					'user_id' => $user->id
@@ -149,7 +149,7 @@ class ticketCtrl extends Ctrl {
 		if($this->Request->posted) {
 			if(isset($this->Request->post->content)) {
 				$r = $this->Answer->add(array(
-					'content' => $this->Request->post->content,
+					'content' => nl2p($this->Request->post->content),
 					'date' => 'NOW()',
 					'user_id' => $user->id,
 					'ticket_id' => $d['tickets']['master']->id

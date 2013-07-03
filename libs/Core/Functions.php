@@ -100,3 +100,8 @@ function object_keys($obj) {
 	}
 	return $keys;
 }
+
+function nl2p($string) {
+	$string = str_replace("\r\n", "\n", trim($string)) . "\n";
+	return preg_replace("#((.*)\n)#m", "<p>\n\$2\n</p>\n", $string);
+}
