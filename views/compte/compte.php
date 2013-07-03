@@ -23,6 +23,9 @@
 </section>
 <section class="middle tickets">
 	<h2>Vos dernières demandes</h2>
+	<?php if(empty($tickets)): ?>
+		Pas de ticket pour le moment...
+	<?php endif ?>
 	<?php foreach($tickets as $ticket): ?>
 		<article>
 			<h3><?= ucfirst($ticket->subject) ?></h3>

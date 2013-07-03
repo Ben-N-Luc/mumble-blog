@@ -4,7 +4,7 @@
 <section class="tickets">
 	<?php if(!$tickets): ?>
 		<div class="alert alert-success">
-			Bravo, pas de tickets pour le moment !
+			Bravo, pas de ticket pour le moment !
 		</div>
 	<?php endif ?>
 	<?php foreach($tickets as $ticket): ?>
