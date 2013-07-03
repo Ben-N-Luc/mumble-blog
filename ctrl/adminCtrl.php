@@ -62,6 +62,10 @@ class adminCtrl extends Ctrl {
 			$this->redirect(url('admin/users-list'));
 		}
 		$d['user'] = current($this->User->search(array('id' => $this->Request->params[0])));
+		$d['ranks'] = array(
+			'u' => 'Utilisateur',
+			'a' => 'Administrateur'
+		);
 
 		$this->set($d);
 	}
