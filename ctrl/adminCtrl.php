@@ -61,7 +61,27 @@ class adminCtrl extends Ctrl {
 		if(!isset($this->Request->params[0]) || !is_numeric($this->Request->params[0])) {
 			$this->redirect(url('admin/users-list'));
 		}
-		$d['user'] = current($this->User->search(array('id' => $this->Request->params[0])));
+
+		$id = $this->Request->params[0];
+
+		if($this->Request->posted) {
+			if($this->User->validates($this->Request->post)) {
+				$new_user['rank'] = $this->Request->post->rank;
+				$new_user['email'] = $this->Request->post->mail;
+				$this->User->update(array('id' => $id), $new_user);
+				$this->Session->setFlash('Utilisateur mis à jour', 'success');
+				$this->Request->reset('post');
+			} else {
+				$this->Session->setFlash('Erreur dans le formulaire', 'error');
+				$this->Form->errors = $this->User->errors;
+			}
+		}
+
+		$d['user'] = current($this->User->search(array('id' => $id)));
+		$d['ranks'] = array(
+			'u' => 'Utilisateur',
+			'a' => 'Administrateur'
+		);
 
 		$this->set($d);
 	}

@@ -25,7 +25,7 @@ class connexionCtrl extends Ctrl {
 					$this->Request->post->password = sha1($this->Request->post->password);
 					unset($this->Request->post->action);
 					$this->User->add($this->Request->post);
-					$this->Request->post = new stdClass();
+					$this->Request->reset('post');
 					$this->Session->setFlash('Vous êtes bien inscrit', 'success');
 				} else {
 					$this->Session->setFlash('Erreur, vérifiez vos informations', 'error');

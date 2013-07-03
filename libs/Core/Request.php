@@ -12,14 +12,14 @@ class Request {
 		$this->action = str_replace('-', '_', $action);
 		$this->params = $params;
 
-		$this->load_get();
-		$this->load_post();
+		$this->_load_get();
+		$this->_load_post();
 	}
 
 	/**
 	 * Récupération et échappement des infos de la variable $_GET
 	 */
-	public function load_get() {
+	protected function _load_get() {
 		if(!empty($_GET)) {
 			$this->get = new stdClass();
 		}
@@ -32,7 +32,7 @@ class Request {
 	/**
 	 * Récupération et échappement des infos de la variable $_POST
 	 */
-	public function load_post() {
+	protected function _load_post() {
 		if(!empty($_POST)) {
 			$this->post = new stdClass();
 			$this->posted = true;
@@ -41,5 +41,20 @@ class Request {
 		foreach ($_POST as $k => $v) {
 			$this->post->$k = htmlentities($v, ENT_QUOTES, 'utf-8');
 		}
+	}
+
+	public function reset($target = null) {
+		if($target === null) {
+			$this->get = new stdClass();
+			$this->post = new stdClass();
+		} elseif ($target == 'get') {
+			$this->get = new stdClass();
+		} elseif ($target == 'post') {
+			$this->post = new stdClass();
+		} else {
+			return false;
+		}
+
+		return true;
 	}
 }
