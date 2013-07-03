@@ -26,6 +26,21 @@ class Form {
 		return $id;
 	}
 
+	protected function _formatOptions(array $options) {
+		$html = '';
+		foreach ($options as $k => $v) {
+			if(!in_array($k, $this->specAttr)) {
+				if(is_int($k)) {
+					$html .= " $v";
+				} else {
+					$html .= sprintf(' %s="%s"', $k, $v);
+				}
+			}
+		}
+
+		return $html;
+	}
+
 	/**
 	 * Ouvre un formulaire
 	 * @param $action Action du formulaire
@@ -42,12 +57,8 @@ class Form {
 		if(isset($options['alignment'])) {
 			$this->_alignment = $options['alignment'];
 		}
-		$html ="<form action=\"$action\" ";
-		if (!empty($options)) {
-			foreach ($options as $attr => $val) {
-				$html .= "$attr=\"$val\" ";
-			}
-		}
+		$html = sprintf('<form action="%s"', $action);
+		$html .= $this->_formatOptions($options);
 		$html .= ">";
 
 		return $html;
@@ -70,9 +81,7 @@ class Form {
 			$options['class'] .= ' btn';
 		}
 		$html = '<div class="actions"><input type="submit" value="' . $value . '"';
-		foreach ($options as $attr => $val) {
-			$html .= ' ' . $attr . '="' . $val . '"';
-		}
+		$html .= $this->_formatOptions($options);
 		$html .= '></div>';
 
 		return $html;
@@ -118,7 +127,7 @@ class Form {
 			$html .= '<label for="' . $options['id'] . '">' . $options['label'] . '</label>';
 		}
 		$fin = "";
-		if ($error && $this->alignment == 'right') {
+		if ($error && $this->_alignment == 'right') {
 			$html .= '<span class="help-inline">' . $error . '</span>';
 		}
 		if ($options['type'] == 'text') {
@@ -139,13 +148,9 @@ class Form {
 			$fin = $this->_controller->Request->post->$name . "</textarea>";
 		}
 		$html .= ' name="' . $name . '"';
-		foreach ($options as $attr => $val) {
-			if(!in_array($attr, $this->specAttr)) {
-				$html .= ' ' . $attr . '="' . $val . '"';
-			}
-		}
+		$html .= $this->_formatOptions($options);
 		$html .= '>' . $fin;
-		if ($error && $this->alignment == 'left') {
+		if ($error && $this->_alignment == 'left') {
 			$html .= '<span class="help-inline">' . $error . '</span>';
 		}
 		$html .= "</div>";
@@ -166,10 +171,8 @@ class Form {
 			}
 			$html .= '<label for="' . $options['id'] . '">' . $options['label'] . '</label>';
 		}
-		$html .= '<select';
-		foreach ($options as $k => $v) {
-			$html .= ' ' . $k . '="' . $v . '"';
-		}
+		$html .= '<select name="' . $name . '"';
+		$html .= $this->_formatOptions($options);
 		$html .= '>';
 		foreach ($data as $k => $v) {
 			$html .= '<option value="' . $k . '"';
