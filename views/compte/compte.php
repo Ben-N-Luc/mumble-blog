@@ -28,14 +28,21 @@
 	<?php endif ?>
 	<?php foreach($tickets as $ticket): ?>
 		<article>
-			<h3><?= ucfirst($ticket->subject) ?></h3>
+			<h3>
+				<a href="<?= url('ticket/view/' . $ticket->id) ?>"><?= ucfirst($ticket->subject) ?></a>
+				<small style="vertical-align: middle;">
+					<a class="badge badge-<?= $ticket->closed ? 'important' : 'success' ?>">
+						<?= $ticket->closed ? 'fermé' : 'ouvert' ?>
+					</a>
+				</small>
+			</h3>
 			<div class="msg">
 				<?= $ticket->content ?>
 			</div>
 			<div class="infos">
 				<ul>
-					<li><?= $ticket->date ?></li>
-					<li><?= ucfirst($ticket->type) ?></li>
+					<li><?= date(Conf::$dateFormat, strtotime($ticket->last_answer)) ?></li>
+					<li><?= $this->badge($ticket->type) ?></li>
 				</ul>
 			</div>
 		</article>

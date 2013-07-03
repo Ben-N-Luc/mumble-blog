@@ -1,11 +1,22 @@
 <section class="tickets">
 	<article>
-		<h3><?= $tickets['master']->subject ?></h3>
+		<h3>
+			<?= $tickets['master']->subject ?>
+			<small style="vertical-align: middle;">
+				<span class="badge badge-<?= $tickets['master']->closed ? 'important' : 'success' ?>">
+					<?= $tickets['master']->closed ? 'fermé' : 'ouvert' ?>
+				</span>
+			</small>
+		</h3>
 		<div class="msg">
 			<?= $tickets['master']->content ?>
 		</div>
 		<div class="infos">
 			<ul>
+				<li>
+					Utilisateur :
+					<a href="<?= url('ticket/ticket/' . $tickets['master']->id) ?>"><?= $tickets['master']->pseudo ?></a>
+				</li>
 				<li><?= $this->badge($tickets['master']->type) ?></li>
 				<li>Date : <?= $tickets['master']->date ?></li>
 			</ul>
