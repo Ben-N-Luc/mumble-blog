@@ -14,6 +14,18 @@ class Form {
 		$this->_controller = $controller;
 	}
 
+	protected function _generateId($name) {
+		$i = 0;
+		$id = "form_$name";
+		while(in_array($id, $this->_usedId)) {
+			$id = "form_$name_$i";
+			$i++;
+		}
+		$this->_usedId[] = $id;
+
+		return $id;
+	}
+
 	/**
 	 * Ouvre un formulaire
 	 * @param $action Action du formulaire
@@ -99,13 +111,9 @@ class Form {
 		$html .= "<div class=\"row$classError\">";
 		if(isset($options['label'])) {
 			if(!isset($options['id'])) {
-				$i = 0;
-				$id = "form_$name";
-				while(in_array($id, $this->_usedId)) {
-					$id = "form_$name_$i";
-					$i++;
-				}
-				$options['id'] = $this->_usedId[] = $id;
+				$options['id'] = $this->_generateId($name);
+			} else {
+				$this->_usedId[] = $options['id'];
 			}
 			$html .= '<label for="' . $options['id'] . '">' . $options['label'] . '</label>';
 		}
@@ -149,7 +157,16 @@ class Form {
 	}
 
 	public function select($name, array $data, array $options = array()) {
-		$html = '<select';
+		$html = "\n";
+		if(isset($options['label'])) {
+			if(!isset($options['id'])) {
+				$options['id'] = $this->_generateId($name);
+			} else {
+				$this->_usedId[] = $options['id'];
+			}
+			$html .= '<label for="' . $options['id'] . '">' . $options['label'] . '</label>';
+		}
+		$html .= '<select';
 		foreach ($options as $k => $v) {
 			$html .= ' ' . $k . '="' . $v . '"';
 		}
@@ -159,9 +176,9 @@ class Form {
 			if(isset($options['value']) && $k == $options['value']) {
 				$html .= ' selected';
 			}
-			$html .= '>' . $v . '</option>';
+			$html .= '>' . $v . "</option>\n";
 		}
-		$html .= '</select>';
+		$html .= "</select>\n";
 
 		return $html;
 	}
@@ -179,6 +196,5 @@ class Form {
 
 		return $slug;
 	}
-
 
 }
