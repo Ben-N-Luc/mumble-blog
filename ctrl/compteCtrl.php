@@ -9,7 +9,7 @@ class compteCtrl extends Ctrl {
 
 	public function compte() {
 		$user = $this->Session->read('user');
-		$tickets = $this->Ticket->liste(array('tickets.user_id' => $user->id));
+		$tickets = $this->Ticket->liste(array('tickets.user_id' => $user->id), 7);
 
 		$this->set('tickets', $tickets);
 		$this->set('user', $user);

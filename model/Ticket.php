@@ -2,8 +2,9 @@
 
 class Ticket extends Model {
 
-	public function liste(array $filtres = array()) {
+	public function liste(array $filtres = array(), $limit = null) {
 		$pieces = array();
+		$lim = '';
 		if(!empty($filtres)) {
 			foreach ($filtres as $k => $v) {
 				$pieces[] = $k . '=' . $this->_quote($v);
@@ -11,6 +12,9 @@ class Ticket extends Model {
 		}
 		$cond1 = 'WHERE ' . implode(' AND ', array_merge($pieces, array('answers.date IS NULL')));
 		$cond2 = 'WHERE ' . implode(' AND ', array_merge($pieces, array('answers.date IS NOT NULL')));
+		if($limit !== null) {
+			$lim = 'LIMIT ' . $limit;
+		}
 
 		$sql = '
 			SELECT
@@ -49,7 +53,8 @@ class Ticket extends Model {
 				GROUP BY answers.ticket_id
 				) AS tmp2
 
-			ORDER BY closed ASC, last_answer DESC';
+			ORDER BY closed ASC, last_answer DESC
+			' . $lim;
 
 		return $this->sql($sql)->fetchAll(PDO::FETCH_OBJ);
 	}
