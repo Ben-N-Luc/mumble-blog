@@ -31,6 +31,6 @@ class Model extends AppModel {
 			}
 		}
 
-		return empty($errors);
+		return empty($this->errors);
 	}
 }
