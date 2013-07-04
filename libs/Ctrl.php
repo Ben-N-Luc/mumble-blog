@@ -68,7 +68,6 @@ class Ctrl extends AppCtrl {
 		return false;
 
 		$viewer = new Viewer();
-		$info = $viewer->getInfo();
 
 		return $viewer->get();
 	}
