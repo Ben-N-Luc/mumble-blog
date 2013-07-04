@@ -10,20 +10,20 @@ Bien sur, on ne demande que ça...
 
 Voici une liste de ce qu'il faut encore faire :
 
-+ Gestion des posts #admin
++ Gestion des posts #admin (@bendem)
   + Ajout
   + Vue
   + Édition
   + Liste
-+ Gestion des utilisateurs #admin (en cours)
-  + Aperçu
++ Avatar par utilisateur #feature (@Quelu)
++ Fonctionnalité remember-me #feature
++ Gestion des utilisateurs #admin
+  + Aperçu (V)
   + Réinitialisation de mdp
-  + Édition des droits
+  + Édition des droits (V)
 + Gestion du serveur
   + Ajout de la mumble-box
 + Édition du tuto depuis l'admin #admin
-+ Avatar par utilisateur #feature
-+ Fonctionnalité remember-me #feature
 + Refonte du viewer #postbeta
 + Pagination des tickets #admin #postbeta
 + Suppression de compte #feature
