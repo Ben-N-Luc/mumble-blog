@@ -4,7 +4,7 @@ class Form {
 
 	public $errors;
 	public $specAttr = array(
-		'label', 'type'
+		'label', 'type', 'file_type'
 	);
 	protected $_controller;
 	protected $_alignment = 'left';
@@ -136,6 +136,14 @@ class Form {
 			$html .= '<input type="email"';
 		} elseif ($options['type'] == 'url') {
 			$html .= '<input type="text" pattern="http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?"';
+		} elseif ($options['type'] == 'file') {
+			$html .= '<input type="file"';
+			// Si on ne précise pas de type de fichier, on n'essaie pas d'afficher ce dernier
+			if (isset($options['file_type'])) {
+				if ($options['file_type'] == 'avatar') {
+					$fin = $this->getAvatar($_SESSION['user']->id);
+				}
+			}
 		} elseif ($options['type'] == 'checkbox') {
 			$html .= '<input type="hidden" name="' . $name . '" value="0"><input type="checkbox"';
 			if ($options['value'] == $this->_controller->Request->post->$name) {
@@ -183,6 +191,18 @@ class Form {
 		}
 		$html .= "</select>\n";
 
+		return $html;
+	}
+
+	/**
+	 * Affiche l'avatar de l'utilisateur $id si il en a un
+	 */
+	public function getAvatar($id = NULL) {
+		$html = "";
+		if ($id && file_exists(WEBROOT_DIR . "/img/users/" . $this->_controller->getAvatarName($id))) {
+			$url = url("img/users/" . $this->_controller->getAvatarName($id));
+			$html = "<div class=\"img\"><img src=\"$url\" alt=\"Avatar\" width=\"150\"></div>";
+		}
 		return $html;
 	}
 
