@@ -1,9 +1,11 @@
 <section class="middle">
 	<h2>Votre compte</h2>
 	<div class="account">
-		<div class="img">
-			<img src="<?php echo url("img/users/1.jpg") ?>" alt="">
-		</div>
+			<?php $user = $this->Session->read('user') ?>
+			<?= $this->Form->start(null, array('enctype' => 'multipart/form-data', 'alignment' => 'right')) ?>
+			<?= $this->Form->input('avatar', array('type' => 'file', 'file_type' => 'avatar')) ?>
+			<?= $this->Form->submit('Modifier') ?>
+			<?= $this->Form->end() ?>
 		<ul>
 			<li>
 				<?= $user->pseudo ?>

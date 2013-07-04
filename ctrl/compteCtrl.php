@@ -11,6 +11,19 @@ class compteCtrl extends Ctrl {
 		$user = $this->Session->read('user');
 		$tickets = $this->Ticket->liste(array('tickets.user_id' => $user->id, 'tickets.closed' => 0), 7);
 
+		// Modification d'avatar
+		if ($this->Request->dataFile && $this->isImg($this->Request->dataFile->avatar)) {
+			$fileName = $this->getAvatarName($user->id);
+			$this->saveFile($this->Request->dataFile->avatar, "/img/users/", $user->id);
+			$this->delFile("/img/users/" . $fileName);
+			$this->Request->reset('file');
+			$this->Session->setFlash('Avatar modifié avec succès !');
+		} else {
+			if (isset($this->Request->dataFile->avatar) && !$this->isImg($this->Request->dataFile->avatar)) {
+				$this->Form->errors['avatar'] = "Le fichier envoyé doit être une image.";
+			}
+		}
+
 		$this->set('tickets', $tickets);
 		$this->set('user', $user);
 	}
@@ -56,7 +69,6 @@ class compteCtrl extends Ctrl {
 				}
 			} elseif($this->Request->post->action == "mail_edit") {
 				// Changement d'email
-				unset($this->Request->post->action);
 				if($this->User->validates($this->Request->post)) {
 					$new_user['mail'] = $this->Request->post->mail;
 					$this->User->update(array('id' => $user->id), $new_user);
