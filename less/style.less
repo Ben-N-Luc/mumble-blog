@@ -387,6 +387,7 @@ aside {
 		padding-left: 36px;
 		margin-top: 3px;
 		margin-bottom: 3px;
+		border-left: 1px dotted lighten(@bgColor, 10%);
 
 		li {
 			margin: 4px 0;
@@ -397,6 +398,10 @@ aside {
 			position: relative;
 			cursor: default;
 			color: lighten(@linkColor, 10%);
+
+			&:before {
+				content: '⇒ ';
+			}
 
 			&:after {
 				display: none;
