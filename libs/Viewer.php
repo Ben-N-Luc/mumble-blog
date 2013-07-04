@@ -88,11 +88,10 @@ class Viewer {
 	protected function _getUsers($users) {
 		$html = '<ul class="users">';
 		foreach ($users as $user) {
-			$html .= '<li class="user-name">' . $user->name;
+			$time = secToTime($user->onlinesecs);
+			$html .= '<li class="user-name" data-uptime="' . $time['h'] . 'h '  . $time['min'] . "m " . $time['sec'] . 's' . '">' . $user->name;
 			$html .= ($user->mute || $user->selfMute || $user->suppressed) ? ' <span class="icon-volume-off icon-white"></span>' : '';
 			$html .= ($user->deaf || $user->selfDeaf) ? ' <span class="icon-headphones icon-white"></span>' : '';
-			$time = secToTime($user->onlinesecs);
-			$html .= ' <span class="user_uptime" title="Connecté depuis">' . $time['h'] . 'h '  . $time['min'] . "m " . $time['sec'] . 's' . '</span>';
 			$html .= '</li>';
 		}
 		$html .= '</ul>';
