@@ -75,4 +75,59 @@ class Ctrl extends AppCtrl {
 	public function css() {
 		echo $this->_Css;
 	}
+
+	public function isImg($image) {
+		$type = explode('/', $image['type']);
+
+		if ($type[0] == 'image') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Recherche le nom du fichier image de l'avatar avec son extension
+	 */
+	public function getAvatarName($id) {
+		$files = $this->getDirFiles("/img/users/");
+
+		foreach ($files as $k => $v) {
+			$name = explode('.', $v);
+			if ($id == $name[0]) {
+				return $v;
+			}
+		}
+	}
+
+	/**
+	 * Sauvegarde un fichier
+	 * @param $image Array contenant le dataFile
+	 * @param $dest url du dossier de destination de fichier format "/img/dossier/..."
+	 * @param $name Nom du fichier sans extension
+	 */
+	public function saveFile($image, $dest, $name) {
+		$chemin = WEBROOT_DIR . $dest;
+		$type = explode('/', $image['type']);
+
+		$chemin .= (substr($chemin, -1, 1) == '/') ? '' : '/' ;
+		move_uploaded_file($image['tmp_name'], $chemin . $name . '.' . $type[1]);
+	}
+
+	/**
+	 * Supprime le fichier passé en argument
+	 */
+	public function delFile($chemin) {
+		if (file_exists(WEBROOT_DIR . $chemin)) {
+			unlink(WEBROOT_DIR . $chemin);
+		}
+	}
+
+	/**
+	 * Retourne un tableau contenant uniquement les fichiers contenu dans le dossier donné
+	 * @param $dir Dossier à scanner
+	 */
+	public function getDirFiles($dir) {
+		return array_diff(scandir(WEBROOT_DIR . $dir), array('.', '..'));
+	}
 }
