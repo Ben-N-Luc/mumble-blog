@@ -42,8 +42,7 @@ class connexionCtrl extends Ctrl {
 					$this->Session->auth($user);
 					$this->Session->setFlash('Vous êtes bien connecté', 'success');
 					$this->redirect(url());
-				}
-				else {
+				} else {
 					if (!$user) {
 						$this->Form->errors['log_pseudo'] = 'Pseudo incorrect ou innexistant.';
 					}
