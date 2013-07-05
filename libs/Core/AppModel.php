@@ -266,6 +266,10 @@ class AppModel {
 		return $pre->fetchAll(PDO::FETCH_OBJ);
 	}
 
+	public function lastInsertId() {
+		return self::$connection->lastInsertId();
+	}
+
 	/**
 	 * Permet d'envoyer une requêtes sql préformatée
 	 * @param string $sql Requête SQL
