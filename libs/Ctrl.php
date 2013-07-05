@@ -2,6 +2,10 @@
 
 class Ctrl extends AppCtrl {
 
+	/**
+	 * Génère la navigation du site
+	 * @return string Code html
+	 */
 	public function nav() {
 		$html = '<nav>' . "\n";
 		$html .= '<div class="expand">';
@@ -48,6 +52,12 @@ class Ctrl extends AppCtrl {
 		echo $html;
 	}
 
+	/**
+	 * Transforme un texte en badge
+	 * @param  string $text Texte
+	 * @param  string $cat Catégorie (si false, cherche le badge correspondant aux catégorie de tickets)
+	 * @return string Code du badge
+	 */
 	public function badge($text, $cat = false) {
 		if(array_key_exists($text, Conf::$ticketCategories) && !$cat) {
 			$html = '<a href="' . url('ticket/ticket/' . $text) . '" class="badge';
@@ -64,6 +74,10 @@ class Ctrl extends AppCtrl {
 		return $html;
 	}
 
+	/**
+	 * Affiche le viewer
+	 * @return string Code html du viewer
+	 */
 	public function viewer() {
 		return false;
 
@@ -72,7 +86,51 @@ class Ctrl extends AppCtrl {
 		return $viewer->get();
 	}
 
+	/**
+	 * Affiche les balises css de link
+	 */
 	public function css() {
 		echo $this->_Css;
 	}
+
+	/**
+	 * Vérifie si un fichier qui vient d'être posté correspond à une image
+	 * @param  array  $file
+	 * @return bool
+	 */
+	public function isImg($file) {
+		$type = explode('/', $file['type']);
+
+		if ($type[0] == 'image') {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Recherche le nom du fichier image de l'avatar avec son extension
+	 */
+	public function getAvatarName($id) {
+		$files = $this->getDirFiles("/img/users/");
+
+		foreach ($files as $k => $v) {
+			$name = explode('.', $v);
+			array_pop($name);
+			if ($id == implode('.', $name)) {
+				return $v;
+			}
+		}
+	}
+
+	/**
+	 * Copie l'avatar par défaut
+	 * @param  int $id Id du nouvel utilisateur
+	 * @return bool Résultat de la fonction copy()
+	 */
+	public function generateAvatar($id) {
+		$dir = WEBROOT_DIR . DS . 'img' . DS . 'users' . DS;
+		return copy($dir . '0.png', $dir . $id . '.png');
+	}
+
 }
