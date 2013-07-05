@@ -127,6 +127,7 @@ class Form {
 			$html .= '<label for="' . $options['id'] . '">' . $options['label'] . '</label>';
 		}
 		$fin = "";
+		$debut = "";
 		if ($error && $this->_alignment == 'right') {
 			$html .= '<span class="help-inline">' . $error . '</span>';
 		}
@@ -141,7 +142,14 @@ class Form {
 			// Si on ne précise pas de type de fichier, on n'essaie pas d'afficher ce dernier
 			if (isset($options['file_type'])) {
 				if ($options['file_type'] == 'avatar') {
-					$fin = $this->getAvatar($_SESSION['user']->id);
+					if(!isset($options['id'])) {
+						$options['id'] = $this->_generateId($name);
+					} else {
+						$this->_usedId[] = $options['id'];
+					}
+					$debut = '<label for="' . $options['id'] . '">';
+					$debut .= $this->getAvatar($this->_controller->Session->read('user')->id);
+					$debut .= '</label>';
 				}
 			}
 		} elseif ($options['type'] == 'checkbox') {
@@ -163,7 +171,7 @@ class Form {
 		}
 		$html .= "</div>";
 
-		return $html . "\n";
+		return $debut . $html . "\n";
 	}
 
 	public function radio($name, array $data, array $options = array()) {
@@ -196,13 +204,15 @@ class Form {
 
 	/**
 	 * Affiche l'avatar de l'utilisateur $id si il en a un
+	 * @param int $id Id de l'utilisateur
 	 */
-	public function getAvatar($id = NULL) {
+	public function getAvatar($id = null) {
 		$html = "";
 		if ($id && file_exists(WEBROOT_DIR . "/img/users/" . $this->_controller->getAvatarName($id))) {
 			$url = url("img/users/" . $this->_controller->getAvatarName($id));
-			$html = "<div class=\"img\"><img src=\"$url\" alt=\"Avatar\" width=\"150\"></div>";
+			$html = '<div class="img"><img src="' . $url . '" alt="Avatar" width="150"></div>';
 		}
+
 		return $html;
 	}
 
