@@ -53,16 +53,16 @@ function isAssociative($array) {
 
 /**
  * Renvoie la chaine de caractère sans les accents
- * @param type string $str Chaine de caract&egrave;re où supprimer les accents
- * @param type string $charset Encodage (d&eacute;faut = 'utf-8')
- * @return type string Chaine sans les caract&egrave;res accentu&eacute;s.
+ * @param type string $str Chaine de caractère où supprimer les accents
+ * @param type string $charset Encodage (défaut = 'utf-8')
+ * @return type string Chaine sans les caractères accentués.
  */
 function removeAccents($str, $charset = 'utf-8') {
 	$str = htmlentities($str, ENT_NOQUOTES, $charset);
 
 	$str = preg_replace('#&(.)(acute|cedil|circ|grave|orn|ring|slash|th|tilde|uml);#', '$1', $str);
-	$str = preg_replace('#&([A-zA-Z])(.+);#', '$1', $str); // pour les ligatures e.g. '&oelig;'
-	$str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caract&egrave;res
+	$str = preg_replace('#&([a-zA-Z])(.+);#', '$1', $str); // pour les ligatures e.g. '&oelig;'
+	$str = preg_replace('#&[^;]+;#', '', $str); // supprime les autres caractères
 
 	return $str;
 }

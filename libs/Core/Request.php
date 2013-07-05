@@ -46,7 +46,7 @@ class Request {
 	}
 
 	/**
-	 * Récupération des fichiers avec la variable $_FILES
+	 * Récupération des fichiers de la variable $_FILES
 	 */
 	protected function _load_files() {
 		if (!empty($_FILES)) {
@@ -62,6 +62,7 @@ class Request {
 		if($target === null) {
 			$this->get = new stdClass();
 			$this->post = new stdClass();
+			$this->dataFile = new stdClass();
 		} elseif ($target == 'get') {
 			$this->get = new stdClass();
 		} elseif ($target == 'post') {
