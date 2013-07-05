@@ -14,3 +14,6 @@ Desktop.ini
 # User avatar
 webroot/img/users/*
 !webroot/img/users/0.png
+
+# Compiled css
+webroot/css/*
