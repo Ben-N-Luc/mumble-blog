@@ -14,8 +14,8 @@ class compteCtrl extends Ctrl {
 		// Modification d'avatar
 		if ($this->Request->dataFile && $this->isImg($this->Request->dataFile->avatar)) {
 			$fileName = $this->getAvatarName($user->id);
-			$this->saveFile($this->Request->dataFile->avatar, "/img/users/", $user->id);
 			$this->delFile("/img/users/" . $fileName);
+			$this->saveFile($this->Request->dataFile->avatar, "/img/users/", $user->id);
 			$this->Request->reset('file');
 			$this->Session->setFlash('Avatar modifié avec succès !');
 		} else {

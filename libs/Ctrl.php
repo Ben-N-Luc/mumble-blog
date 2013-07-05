@@ -108,11 +108,11 @@ class Ctrl extends AppCtrl {
 	 * @param $name Nom du fichier sans extension
 	 */
 	public function saveFile($file, $dest, $name) {
-		$chemin = WEBROOT_DIR . $dest;
+		$path = WEBROOT_DIR . $dest;
 		$type = explode('/', $file['type']);
 
-		$chemin .= (substr($chemin, -1, 1) == '/') ? '' : '/' ;
-		move_uploaded_file($file['tmp_name'], $chemin . $name . '.' . $type[1]);
+		$path .= (substr($path, -1, 1) == '/') ? '' : '/' ;
+		return @move_uploaded_file($file['tmp_name'], $path . $name . '.' . $type[1]);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Ctrl extends AppCtrl {
 	 * @return bool
 	 */
 	public function delFile($path) {
-		if (file_exists(WEBROOT_DIR . $path)) {
+		if (file_exists(WEBROOT_DIR . $path) && is_file(WEBROOT_DIR . $path)) {
 			unlink(WEBROOT_DIR . $path);
 			return true;
 		}
