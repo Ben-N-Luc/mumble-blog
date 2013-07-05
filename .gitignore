@@ -10,3 +10,6 @@ Desktop.ini
 
 # Mac crap
 .DS_Store
+
+# User avatar
+/webroot/img/users/*

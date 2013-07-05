@@ -183,6 +183,43 @@ class AppCtrl {
 	}
 
 	/**
+	 * Sauvegarde un fichier
+	 * @param $file Array contenant le dataFile
+	 * @param $dest url du dossier de destination de fichier format "/img/dossier/..."
+	 * @param $name Nom du fichier sans extension
+	 */
+	public function saveFile($file, $dest, $name) {
+		$path = WEBROOT_DIR . $dest;
+		$type = explode('/', $file['type']);
+
+		$path .= (substr($path, -1, 1) == '/') ? '' : '/' ;
+		return @move_uploaded_file($file['tmp_name'], $path . $name . '.' . $type[1]);
+	}
+
+	/**
+	 * Supprime le fichier passé en argument
+	 * @param  string $path Chemin du fichier à supprimer
+	 * @return bool
+	 */
+	public function delFile($path) {
+		if (file_exists(WEBROOT_DIR . $path) && is_file(WEBROOT_DIR . $path)) {
+			unlink(WEBROOT_DIR . $path);
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Retourne un tableau contenant les fichiers et les dossiers contenu dans le dossier donné
+	 * @param  $dir Dossier à scanner
+	 * @return array Tableau des fichiers et dossier
+	 */
+	public function getDirFiles($dir) {
+		return array_diff(scandir(WEBROOT_DIR . $dir), array('.', '..'));
+	}
+
+	/**
 	 * Trigger an error
 	 * @param str $text Error description
 	 * @param int/str $lvl Type d'erreur (E_USER_NOTICE, E_USER_WARNING, E_USER_ERROR, user-defined type...)

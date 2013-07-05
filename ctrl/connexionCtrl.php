@@ -25,6 +25,7 @@ class connexionCtrl extends Ctrl {
 					$this->Request->post->password = sha1($this->Request->post->password);
 					unset($this->Request->post->action);
 					$this->User->add($this->Request->post);
+					$this->generateAvatar($this->User->lastInsertId());
 					$this->Request->reset('post');
 					$this->Session->setFlash('Vous êtes bien inscrit', 'success');
 				} else {
@@ -42,8 +43,7 @@ class connexionCtrl extends Ctrl {
 					$this->Session->auth($user);
 					$this->Session->setFlash('Vous êtes bien connecté', 'success');
 					$this->redirect(url());
-				}
-				else {
+				} else {
 					if (!$user) {
 						$this->Form->errors['log_pseudo'] = 'Pseudo incorrect ou innexistant.';
 					}
