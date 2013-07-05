@@ -94,7 +94,8 @@ class Ctrl extends AppCtrl {
 
 		foreach ($files as $k => $v) {
 			$name = explode('.', $v);
-			if ($id == $name[0]) {
+			array_pop($name);
+			if ($id == implode('.', $name)) {
 				return $v;
 			}
 		}
@@ -102,30 +103,36 @@ class Ctrl extends AppCtrl {
 
 	/**
 	 * Sauvegarde un fichier
-	 * @param $image Array contenant le dataFile
+	 * @param $file Array contenant le dataFile
 	 * @param $dest url du dossier de destination de fichier format "/img/dossier/..."
 	 * @param $name Nom du fichier sans extension
 	 */
-	public function saveFile($image, $dest, $name) {
+	public function saveFile($file, $dest, $name) {
 		$chemin = WEBROOT_DIR . $dest;
-		$type = explode('/', $image['type']);
+		$type = explode('/', $file['type']);
 
 		$chemin .= (substr($chemin, -1, 1) == '/') ? '' : '/' ;
-		move_uploaded_file($image['tmp_name'], $chemin . $name . '.' . $type[1]);
+		move_uploaded_file($file['tmp_name'], $chemin . $name . '.' . $type[1]);
 	}
 
 	/**
 	 * Supprime le fichier passé en argument
+	 * @param string $path Chemin du fichier à supprimer
+	 * @return bool
 	 */
-	public function delFile($chemin) {
-		if (file_exists(WEBROOT_DIR . $chemin)) {
-			unlink(WEBROOT_DIR . $chemin);
+	public function delFile($path) {
+		if (file_exists(WEBROOT_DIR . $path)) {
+			unlink(WEBROOT_DIR . $path);
+			return true;
 		}
+
+		return false;
 	}
 
 	/**
-	 * Retourne un tableau contenant uniquement les fichiers contenu dans le dossier donné
+	 * Retourne un tableau contenant les fichiers et les dossiers contenu dans le dossier donné
 	 * @param $dir Dossier à scanner
+	 * @return array Tableau des fichiers et dossier
 	 */
 	public function getDirFiles($dir) {
 		return array_diff(scandir(WEBROOT_DIR . $dir), array('.', '..'));
