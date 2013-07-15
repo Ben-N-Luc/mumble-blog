@@ -12,7 +12,6 @@ define('WEBROOT_DIR', ROOT . 'webroot');
 define('LIBS_DIR',    ROOT . 'libs');
 define('CORE_DIR',    LIBS_DIR . DS . 'Core');
 define('CTRL_DIR',    ROOT . 'ctrl');
-define('DATA_DIR',    ROOT . 'data');
 define('MODEL_DIR',   ROOT . 'model');
 define('LESS_DIR',    ROOT . 'less');
 define('ONLINE',      (DS == '/'));

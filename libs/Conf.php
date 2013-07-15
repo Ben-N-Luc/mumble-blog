@@ -7,16 +7,16 @@ class Conf {
 	 */
 	static $dbInfos = array(
 		'local' => array(
-			'host'   	=> 'localhost',
-			'user'   	=> 'root',
-			'pwd'    	=> '',
-			'dbname' 	=> 'mumble-blog'
+			'host'   => 'localhost',
+			'user'   => 'root',
+			'pwd'    => '',
+			'dbname' => 'mumble-blog'
 		),
 		'online' => array(
-			'host'   	=> 'localhost',
-			'user'   	=> 'u20470',
-			'pwd'    	=> 'LCIVKBILSB',
-			'dbname' 	=> 'db20470'
+			'host'   => 'localhost',
+			'user'   => 'u20470',
+			'pwd'    => 'LCIVKBILSB',
+			'dbname' => 'db20470'
 		)
 	);
 

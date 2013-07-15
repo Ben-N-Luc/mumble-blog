@@ -10,7 +10,7 @@ class AppCtrl {
 	/**
 	 * Modèles à charger dans tous les controllers
 	 */
-	public $DefaultModels = array('Config');
+	protected $_defaultModels = array('Config');
 
 	/**
 	 * Liste des objets utilisé par le controller
@@ -64,7 +64,7 @@ class AppCtrl {
 		$this->Session = new Session();
 
 		// Chargement des models
-		$models = array_merge($this->DefaultModels, $this->uses['Models']);
+		$models = array_merge($this->_defaultModels, $this->uses['Models']);
 		$this->loadModels($models);
 
 		// Redirection vers la page de connexion si nécessaire
@@ -179,6 +179,7 @@ class AppCtrl {
 		} else {
 			$this->error(VIEWS_DIR . DS . 'elements' . DS . $elemName . '.php not found', E_USER_WARNING);
 		}
+
 		return $elem;
 	}
 
@@ -267,5 +268,4 @@ class AppCtrl {
 		header('Location: ' . $url);
 		exit();
 	}
-
 }
