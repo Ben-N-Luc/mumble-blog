@@ -7,6 +7,7 @@ define('DS',          DIRECTORY_SEPARATOR);
 define('ROOT',        substr(dirname(__FILE__), 0, strpos(dirname(__FILE__), 'webroot')));
 define('URL_ROOT',    str_replace('/webroot/index.php', '', $_SERVER['SCRIPT_NAME']));
 define('REQUEST_URI', trim(str_replace(URL_ROOT, '', current(explode('?', $_SERVER['REQUEST_URI']))), '/'));
+define('CACHE_DIR',   ROOT . 'cache');
 define('VIEWS_DIR',   ROOT . 'views');
 define('WEBROOT_DIR', ROOT . 'webroot');
 define('LIBS_DIR',    ROOT . 'libs');
