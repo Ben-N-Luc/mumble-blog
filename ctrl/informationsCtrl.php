@@ -3,7 +3,17 @@
 class informationsCtrl extends Ctrl {
 
 	public function informations() {
-		$viewer = new Viewer();
+		$cacheViewer = new Cache('Viewer');
+
+		if(!$cacheViewer->validate()) {
+			$viewer = new Viewer();
+			$cacheViewer->write($viewer);
+			var_dump('not cached');
+		} else {
+			$viewer = $cacheViewer->read();
+			var_dump('cached');
+		}
+
 		$result = $viewer->get();
 
 		// transformation en jour, heure...
