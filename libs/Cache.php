@@ -42,7 +42,7 @@ class Cache {
 	}
 
 	protected function _setFile($cache_name) {
-		$this->_file = CACHE_DIR . DS . $cache_name . '.cache';
+		$this->_file = CACHE_DIR . DS . strtolower($cache_name) . '.cache';
 	}
 
 	public function validate() {
