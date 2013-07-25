@@ -8,10 +8,8 @@ class informationsCtrl extends Ctrl {
 		if(!$cacheViewer->validate()) {
 			$viewer = new Viewer();
 			$cacheViewer->write($viewer);
-			var_dump('not cached');
 		} else {
 			$viewer = $cacheViewer->read();
-			var_dump('cached');
 		}
 
 		$result = $viewer->get();
