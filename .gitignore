@@ -13,3 +13,6 @@ webroot/img/users/*
 
 # Compiled css
 webroot/css/*
+
+# Cache
+cache/*
