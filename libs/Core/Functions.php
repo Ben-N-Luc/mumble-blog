@@ -90,6 +90,7 @@ function secToTime($sec) {
 	$time['sec'] -= $time['h'] * 3600;
 	$time['min'] = floor($time['sec'] / 60);
 	$time['sec'] -= $time['min'] * 60;
+
 	return $time;
 }
 
@@ -98,10 +99,12 @@ function object_keys($obj) {
 	foreach ($obj as $k => $v) {
 		$keys[] = $k;
 	}
+
 	return $keys;
 }
 
 function nl2p($string) {
 	$string = str_replace("\r\n", "\n", trim($string)) . "\n";
+
 	return preg_replace("#((.*)\n)#m", "<p>\n\$2\n</p>\n", $string);
 }
