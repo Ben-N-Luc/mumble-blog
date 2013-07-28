@@ -88,6 +88,8 @@ a {
 
 .clearfix {
 	clear: both;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .global {
@@ -334,12 +336,49 @@ nav {
 }
 
 article {
+	.account {
+		min-height: 90px;
+		height: 100%;
+		margin-bottom: 0;
+		//line-height: 114px;
+
+		img {
+			vertical-align: middle;
+			max-width: 100px;
+			.border-radius(3px);
+		}
+
+		div {
+			margin-top: 10px;
+			line-height: 10px;
+			text-align: center;
+		}
+	}
+	.account.left { float: left; }
+	.account.right { float: right; line-height: 112px; }
+
+	.ticket-content {
+		margin-bottom: 0;
+		padding-bottom: 1px;
+
+		&.left {
+			padding-right: 10px;
+			margin-right: 110px;
+			border-right: 1px solid @fontColor;
+		}
+		&.right {
+			padding-left: 10px;
+			margin-left: 110px;
+			border-left: 1px solid @fontColor;
+		}
+	}
+
 	.msg {
 		text-align: justify;
 	}
 
 	.infos {
-		margin-top: 15px;
+		margin-top: 20px;
 		text-align: right;
 
 		ul {
