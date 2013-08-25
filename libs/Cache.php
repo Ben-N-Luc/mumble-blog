@@ -29,7 +29,7 @@ class Cache {
 			);
 			$terms = implode('|', array_map(function($v) { return $v . 's?'; }, $terms));
 
-			$pattern = "\+ [0-9]+ ($terms)";
+			$pattern = "\+ ?[0-9]+ ($terms)";
 			$pattern = "($pattern, )*$pattern";
 
 			if(preg_match("/$pattern/", $interval)) {
