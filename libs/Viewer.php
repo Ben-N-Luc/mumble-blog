@@ -4,7 +4,7 @@ class Viewer {
 
 	public $infos;
 	protected $_json;
-	protected $_url = 'http://www.mymumble.fr/viewer/json/get-viewer.php?port=20470';
+	protected $_url = 'https://mymumble.fr/viewer/json/20470';
 
 	function __construct($url = null) {
 		if($url) {
