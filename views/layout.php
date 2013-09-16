@@ -33,7 +33,7 @@
 				</div>
 				<div class="pull-right">
 					En partenariat avec <a href="http://wtgeek.be" target="_blank">WTGeek</a>
-					et <a href="http://wtlink.be" target="_blank">WTLink</a>.
+					et <a href="http://bendem.be" target="_blank">bendem</a>.
 				</div>
 				<div class="clearfix"></div>
 			</footer>
