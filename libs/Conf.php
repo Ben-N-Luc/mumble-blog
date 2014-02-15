@@ -29,7 +29,7 @@ class Conf {
 	/**
 	 * Email adress to use
 	 */
-	static $email = 'mumble@wtgeek.be';
+	static $email = 'postmaster@bendem.be';
 
 	static $ticketCategories = array(
 		'channel' => array(
