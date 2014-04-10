@@ -14,9 +14,9 @@ class Conf {
 		),
 		'online' => array(
 			'host'   => 'localhost',
-			'user'   => 'u20470',
-			'pwd'    => 'LCIVKBILSB',
-			'dbname' => 'db20470'
+			'user'   => '',
+			'pwd'    => '',
+			'dbname' => ''
 		)
 	);
 
