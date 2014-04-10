@@ -32,8 +32,7 @@
 					&copy; Ben et Luc's 2013.
 				</div>
 				<div class="pull-right">
-					En partenariat avec <a href="http://wtgeek.be" target="_blank">WTGeek</a>
-					et <a href="http://bendem.be" target="_blank">bendem</a>.
+					En partenariat avec <a href="http://bendem.be" target="_blank">bendem</a>.
 				</div>
 				<div class="clearfix"></div>
 			</footer>
