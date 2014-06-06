@@ -46,16 +46,18 @@
 </div>
 <h3>L'organisation du serveur</h3>
 <div>
-	Le serveur est divisée en deux parties :
+	Le serveur est divisée en plusieurs parties :
 	<ul>
 		<li>Le salon <em>"Public"</em></li>
+		<li>Les salons <em>"sur demande</em></li>
 		<li>Le salon <em>"Private"</em></li>
 	</ul>
 	<div>
 		<h4>Le salon Public</h4>
 		<p>
-			Par défaut, vous vous connectez dans ce salon, il est accessible par tous et vous n'avez accès qu'à lui.
-			Si vous ne souhaitez pas rester dans ce salon, plusieurs choix s'offrent à vous :
+			Par défaut, vous vous connectez dans ce salon, il est accessible par tous et
+			vous n'avez accès qu'à lui. Si vous ne souhaitez pas rester dans ce salon,
+			plusieurs choix s'offrent à vous :
 		</p>
 		<ul>
 			<li>Créer un salon <em>"temporaire"</em> (clic droit ajouter sur le salon public), celui-ci disparaitra dès que vous le quitterez...</li>
@@ -71,10 +73,26 @@
 		</p>
 	</div>
 	<div>
+		<h4>Les salons sur demande</h4>
+		<p>
+			Les salons sur demande sont accordés sur demande évidemment.
+			Ils sont plus ou moins autonome et les problèmes sont réglés par l'admin du chan.
+		</p>
+		<p>
+			Si vous en faite partie, il vous suffit de demander à l'admin du salon de vous donner la permission
+			d'y entrer.
+		</p>
+		<p>
+			Si vous êtes admin de salon et que vous avez un problème pour configurer les droits de votre salon,
+			n'hésitez pas contacter <em>bendem</em> ou <em>Quelu</em>. :-)
+		</p>
+	</div>
+	<div>
 		<h4>Le salon private</h4>
 		<p>
-			Le salon privé, est réservé aux membres fondateurs du serveur ainsi qu'à leurs amis... Si vous en faites partie, attendez qu'il(s) se connecte(nt)
-			et envoyez lui/leur un message pour qu'il(s) vous enregistre(nt)... Une fois enregistré, vous pourez les rejoindre.
+			Le salon privé, est réservé aux membres fondateurs du serveur ainsi qu'à leurs amis...
+			Si vous en faites partie, attendez qu'il(s) se connecte(nt) et envoyez lui/leur un message
+			pour qu'il(s) vous enregistre(nt)... Une fois enregistré, vous pourez les rejoindre.
 		</p>
 	</div>
 </div>
