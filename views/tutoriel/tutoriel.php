@@ -49,7 +49,7 @@
 	Le serveur est divisée en plusieurs parties :
 	<ul>
 		<li>Le salon <em>"Public"</em></li>
-		<li>Les salons <em>"sur demande</em></li>
+		<li>Les salons <em>"sur demande"</em></li>
 		<li>Le salon <em>"Private"</em></li>
 	</ul>
 	<div>
