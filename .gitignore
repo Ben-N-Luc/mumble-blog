@@ -16,3 +16,5 @@ webroot/css/*
 
 # Cache
 cache/*
+
+.idea/*
